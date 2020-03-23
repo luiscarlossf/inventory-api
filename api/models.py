@@ -73,7 +73,7 @@ class Equipament(models.Model):
     description = models.TextField("Descrição", max_length=1000, help_text="Insira uma descrição do equipamento.")
     warranty_start = models.DateField("Início da Garantia")
     warranty_end = models.DateField("Fim da Garantia")
-    Ua = models.ForeignKey(Ua, on_delete=models.SET_NULL, verbose_name="Unidade Administrativa",null=True, blank=True, help_text="Selecione a unidade administrativa onde o equipamento se encontra.")
+    ua = models.ForeignKey(Ua, on_delete=models.SET_NULL, verbose_name="Unidade Administrativa",null=True, blank=True, help_text="Selecione a unidade administrativa onde o equipamento se encontra.")
     floor = models.ForeignKey(Floor, on_delete=models.SET_NULL, verbose_name="Andar", null=True, blank=True, help_text="Selecione o andar em que o equipamento se encontra.")
     acquisition_date = models.DateField("Data de Aquisição")
     acquisition_value = models.FloatField("Valor de Aquisição")
