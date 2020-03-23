@@ -4,7 +4,7 @@ class Category(models.Model):
     """
     Modelo representando uma categoria de um equipamento.
     """
-    name = models.CharField("Categoria", max_length=200, help_text="Insira o nome da categoria.")
+    name = models.CharField("Categoria", max_length=200, unique=True, help_text="Insira o nome da categoria.")
 
     def __str__(self):
         """
@@ -16,7 +16,7 @@ class Floor(models.Model):
     """
     Modelo representando um andar do prédio.
     """
-    name = models.CharField("Andar", max_length=100, help_text="Insira a descrição do andar do pedrio.")
+    name = models.CharField("Andar", max_length=100, unique=True, help_text="Insira a descrição do andar do pedrio.")
 
     def __str__(self):
         """
@@ -42,7 +42,7 @@ class Brand(models.Model):
     """
     Modelo representando uma marca de um equipamento.
     """
-    name = models.CharField("Marca", max_length=200, help_text="Insira o nome da marca.")
+    name = models.CharField("Marca", max_length=200, unique=True, help_text="Insira o nome da marca.")
 
     def __str__(self):
         """
@@ -54,7 +54,7 @@ class Model(models.Model):
     """
     Modelo representando um modelo de equipamento.
     """
-    name = models.CharField("Modelo", max_length=200, help_text="Insira o nome da modelo.")
+    name = models.CharField("Modelo", max_length=200, unique=True, help_text="Insira o nome da modelo.")
 
     def __str__(self):
         """
