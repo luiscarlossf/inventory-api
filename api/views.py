@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from .models import Brand, Category, Computer, Computer, Equipament, Floor, Model, Ua
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import UserSerializer, GroupSerializer, BrandSerializer, CategorySerializer, \
 ComputerSerializer, EquipamentSerializer, FloorSerializer, ModelSerializer, UaSerializer
@@ -30,6 +30,10 @@ class BrandViewSet(viewsets.ModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['name']
+    ordering = ['name']
+    search_fields = ['name']
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -39,6 +43,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['name']
+    ordering = ['name']
+    search_fields = ['name']
 
 
 class ComputerViewSet(viewsets.ModelViewSet):
@@ -48,6 +56,11 @@ class ComputerViewSet(viewsets.ModelViewSet):
     queryset = Computer.objects.all()
     serializer_class = ComputerSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['patrimony', 'brand', 'model']
+    ordering = ['patrimony']
+    filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status', 'policy', 'status_zenworks', 'status_trend', 'status_wsus']
+    search_fields = ['patrimony']
 
 
 class EquipamentViewSet(viewsets.ModelViewSet):
@@ -57,6 +70,11 @@ class EquipamentViewSet(viewsets.ModelViewSet):
     queryset = Equipament.objects.all()
     serializer_class = EquipamentSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['patrimony', 'brand', 'model']
+    ordering = ['patrimony']
+    filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status']
+    search_fields = ['patrimony']
 
 
 class FloorViewSet(viewsets.ModelViewSet):
@@ -66,6 +84,10 @@ class FloorViewSet(viewsets.ModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['name']
+    ordering = ['name']
+    search_fields = ['name']
 
 
 class ModelViewSet(viewsets.ModelViewSet):
@@ -75,6 +97,10 @@ class ModelViewSet(viewsets.ModelViewSet):
     queryset = Model.objects.all()
     serializer_class = ModelSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['name']
+    ordering = ['name']
+    search_fields = ['name']
 
 
 class UaViewSet(viewsets.ModelViewSet):
@@ -84,3 +110,8 @@ class UaViewSet(viewsets.ModelViewSet):
     queryset = Ua.objects.all()
     serializer_class = UaSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ['name']
+    ordering = ['name']
+    filterset_fields = ['floor']
+    search_fields = ['code', 'name']
