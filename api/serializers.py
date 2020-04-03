@@ -62,3 +62,6 @@ class UaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Ua
         fields = '__all__'
+
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(write_only=True, help_text="Insira o arquivos no formato CSV.")
