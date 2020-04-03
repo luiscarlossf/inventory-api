@@ -1,9 +1,12 @@
+import csv
 from django.contrib.auth.models import User, Group
 from .models import Brand, Category, Computer, Computer, Equipament, Floor, Model, Ua
 from rest_framework import viewsets, filters
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import UserSerializer, GroupSerializer, BrandSerializer, CategorySerializer, \
-ComputerSerializer, EquipamentSerializer, FloorSerializer, ModelSerializer, UaSerializer
+ComputerSerializer, EquipamentSerializer, FloorSerializer, ModelSerializer, UaSerializer, FileUploadSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -115,3 +118,82 @@ class UaViewSet(viewsets.ModelViewSet):
     ordering = ['name']
     filterset_fields = ['floor']
     search_fields = ['code', 'name']
+
+class FileUploadViewSet(viewsets.ViewSet):
+    """
+    API endpoint que permite o upload de arquivos.
+    """
+    permission_classes = [IsAdminUser]
+    parser_classes = [MultiPartParser]
+    serializer_class = FileUploadSerializer
+
+    def create(self, request):
+        """
+        csvfile = request.data['file']
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            print(row)
+        #Colocar cada dada em suas determinadas tabelas do banco.
+        """
+        try:
+            f = request.data['file']
+            with open('./files/upload-file.txt', 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+
+            with open('./files/upload-file.txt') as csvfile:
+                reader = csv.DictReader(csvfile, delimiter=';')
+                categories = set()
+                floors = set()
+                uas = dict()
+                brands = set()
+                models = set()
+                equipaments = dict()
+                for row in reader:
+                    #Carrega as categorias
+                    category = row['Material'].split('-')[1]
+                    categories.add(category)
+                    #Carrega os andares
+                    floor = row['U.L.'].split('-')[2]
+                    floors.add(floor)
+                    #Carrega as UAs
+                    ua = row['U.A.'].split('-')
+                    uas[ua[0]] = ua[1:]
+                    #Carrega as marcas
+                    brand = row['Marca']
+                    brands.add(brand)
+                    #Carrega os modelos
+                    model = row['Modelo']
+                    models.add(model)
+                    #Carrega os equipamentos
+                    patrimony = row['Patrimônio']
+                    warranty = row['Garantia'].split('-')
+                    if len(warranty) == 6:
+                        start = warranty[0]+'/'+warranty[1]+'/'+warranty[2]
+                        end = warranty[3]+'/'+warranty[4]+'/'+warranty[5]
+                    else:
+                        start = end = None
+                    equipaments[patrimony] = [brand, category, model, None, start, end, ua, floor, None, None, False, False, False, False]
+            
+            #Colocar cada dada em suas determinadas tabelas do banco.
+
+            return Response("O upload foi concluido com sucesso.", status=204)
+        except Exception:
+            return Response("O upload não foi concluido com sucesso.", status=400)
+    """
+    def list(self, request):
+        pass
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        pass
+    """
+    
