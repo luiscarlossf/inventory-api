@@ -1,6 +1,6 @@
 import csv
 from django.contrib.auth.models import User, Group
-from .models import Brand, Category, Computer, Computer, Equipament, Floor, Model, Ua
+from .models import Brand, Category, Computer, Equipament, Floor, Model, Ua
 from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
@@ -142,29 +142,62 @@ class FileUploadViewSet(viewsets.ViewSet):
                     destination.write(chunk)
 
             with open('./files/upload-file.txt') as csvfile:
+                #Deleta todos os dados do banco de dados
+                Brand.objects.all().delete()
+                Category.objects.all().delete()
+                Computer.objects.all().delete()
+                Equipament.objects.all().delete()
+                Floor.objects.all().delete()
+                Model.objects.all().delete()
+                Ua.objects.all().delete()
+
                 reader = csv.DictReader(csvfile, delimiter=';')
-                categories = set()
-                floors = set()
-                uas = dict()
-                brands = set()
-                models = set()
                 equipaments = dict()
                 for row in reader:
                     #Carrega as categorias
                     category = row['Material'].split('-')[1]
-                    categories.add(category)
+                    try:
+                        if category:
+                            c = Category(name=category)
+                            c.save()
+                    except Exception:
+                        pass
                     #Carrega os andares
                     floor = row['U.L.'].split('-')[2]
-                    floors.add(floor)
+                    if ("ANDAR" in floor) or (("TÉRREO") in floor):
+                        try:
+                            floor = floor.split(',')[1]
+                            if floor:
+                                f = Floor(name=floor)
+                                f.save()
+                        except Exception:
+                            pass
                     #Carrega as UAs
                     ua = row['U.A.'].split('-')
-                    uas[ua[0]] = ua[1:]
+                    try:
+                        u = Ua(code=int(ua[0]), name=ua[1])
+                        floor = Floor.objects.get(name=floor)
+                        u.floor = floor
+                        u.save()
+                    except Exception:
+                        pass
+
                     #Carrega as marcas
                     brand = row['Marca']
-                    brands.add(brand)
+                    try:
+                        if brand:
+                            b = Brand(name=brand)
+                            b.save()
+                    except Exception:
+                        pass
                     #Carrega os modelos
                     model = row['Modelo']
-                    models.add(model)
+                    try:
+                        if model:
+                            m = Model(name=model)
+                            m.save()
+                    except Exception:
+                        pass
                     #Carrega os equipamentos
                     patrimony = row['Patrimônio']
                     warranty = row['Garantia'].split('-')

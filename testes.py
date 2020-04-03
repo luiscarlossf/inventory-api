@@ -11,6 +11,9 @@ with open('./files/' + name_file + '.txt', newline='') as csvfile:
     models = set()
     equipaments = dict()
     for row in reader:
+        print(row.keys())
+        print(row)
+        break
         #Carrega as categorias
         category = row['Material'].split('-')[1]
         categories.add(category)
@@ -35,5 +38,9 @@ with open('./files/' + name_file + '.txt', newline='') as csvfile:
         else:
             start = end = None
         equipaments[patrimony] = [brand, category, model, None, start, end, ua, floor, None, None, False, False, False, False]
+
+        cont += 1
+        if cont == 5:
+            break
 
     print("Dados carregados com sucesso!")
