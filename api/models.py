@@ -70,13 +70,12 @@ class Equipament(models.Model):
     brand = models.ForeignKey(Brand, verbose_name="Marca", blank=True, on_delete=models.PROTECT, help_text="Selecione a marca do equipamento.")
     category = models.ForeignKey(Category, verbose_name="Categoria", blank=True, on_delete=models.PROTECT, help_text="Selecione a categoria do equipamento." )
     model = models.ForeignKey(Model, verbose_name="Modelo", blank=True, on_delete=models.PROTECT, help_text="Selecione o modelo do equipamento.")
-    description = models.TextField("Descrição", max_length=1000, blank=True, help_text="Insira uma descrição do equipamento.")
     warranty_start = models.DateField("Início da Garantia")
     warranty_end = models.DateField("Fim da Garantia")
     ua = models.ForeignKey(Ua, on_delete=models.SET_NULL, verbose_name="Unidade Administrativa",null=True, blank=True, help_text="Selecione a unidade administrativa onde o equipamento se encontra.")
     floor = models.ForeignKey(Floor, on_delete=models.SET_NULL, verbose_name="Andar", null=True, blank=True, help_text="Selecione o andar em que o equipamento se encontra.")
-    acquisition_date = models.DateField("Data de Aquisição")
-    acquisition_value = models.FloatField("Valor de Aquisição")
+    acquisition_date = models.DateField("Data de Aquisição", null=True, blank=True)
+    acquisition_value = models.FloatField("Valor de Aquisição", null=True, blank=True)
     
     _STATUS = (
         ('u', 'Usado'),
@@ -86,20 +85,26 @@ class Equipament(models.Model):
         ('d', 'Doação'),
     )
 
-    status = models.CharField("Status de uso", max_length=1, choices=_STATUS, default='a')
+    status = models.CharField("Status de uso", max_length=1, choices=_STATUS, default='u')
 
     def __str__(self):
         """
         String representando o equipamento
         """
-        return "{0} - {1} - {2}".format(self.patrimony, self.category, self.model)
+        return "{0} - {1} - {2} - {3}".format(self.patrimony, self.category, self.brand, self.model)
+    
+    def getDescription(self):
+        """
+        String descrevendo o equipamento
+        """
+        return self.category + self.brand + self.model
 
 class Computer(Equipament):
     """
     Modelo representando um computador
     """
     
-    policy = models.BooleanField("Política", help_text="Marque se o computador está na política da procuradoria.")
+    policy = models.BooleanField("Política", default=False, help_text="Marque se o computador está na política da procuradoria.")
     status_zenworks = models.BooleanField("Status do Zenworks", default=False, help_text="Marque se o computador está sendo monitorado pelo Zenworks.")
     status_trend = models.BooleanField("Status do TREND", default=False, help_text="Marque se o computador está sendo monitorado pelo TREND.")
     status_wsus = models.BooleanField("Status do WSUS", default=False, help_text="Marque se o computador está sendo monitorado pelo WSUS.")
