@@ -67,11 +67,11 @@ class Equipament(models.Model):
     Modelo representando um equipamento.
     """
     patrimony = models.CharField("Patrimônio", unique=True, max_length=8, blank = True, null=True, help_text="Insira o patrimônio do equipamento.")
-    brand = models.ForeignKey(Brand, verbose_name="Marca", blank=True, on_delete=models.PROTECT, help_text="Selecione a marca do equipamento.")
+    brand = models.ForeignKey(Brand, verbose_name="Marca", blank=True, null=True, on_delete=models.PROTECT, help_text="Selecione a marca do equipamento.")
     category = models.ForeignKey(Category, verbose_name="Categoria", blank=True, on_delete=models.PROTECT, help_text="Selecione a categoria do equipamento." )
-    model = models.ForeignKey(Model, verbose_name="Modelo", blank=True, on_delete=models.PROTECT, help_text="Selecione o modelo do equipamento.")
-    warranty_start = models.DateField("Início da Garantia")
-    warranty_end = models.DateField("Fim da Garantia")
+    model = models.ForeignKey(Model, verbose_name="Modelo", blank=True, null=True, on_delete=models.PROTECT, help_text="Selecione o modelo do equipamento.")
+    warranty_start = models.DateField("Início da Garantia", null=True, blank=True)
+    warranty_end = models.DateField("Fim da Garantia", null=True, blank=True)
     ua = models.ForeignKey(Ua, on_delete=models.SET_NULL, verbose_name="Unidade Administrativa",null=True, blank=True, help_text="Selecione a unidade administrativa onde o equipamento se encontra.")
     floor = models.ForeignKey(Floor, on_delete=models.SET_NULL, verbose_name="Andar", null=True, blank=True, help_text="Selecione o andar em que o equipamento se encontra.")
     acquisition_date = models.DateField("Data de Aquisição", null=True, blank=True)
