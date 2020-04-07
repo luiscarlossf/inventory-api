@@ -143,10 +143,10 @@ class FileUploadViewSet(viewsets.ViewSet):
 
             with open('./files/upload-file.txt') as csvfile:
                 #Deleta todos os dados do banco de dados
+                Equipament.objects.all().delete()
+                Computer.objects.all().delete()
                 Brand.objects.all().delete()
                 Category.objects.all().delete()
-                Computer.objects.all().delete()
-                Equipament.objects.all().delete()
                 Floor.objects.all().delete()
                 Model.objects.all().delete()
                 Ua.objects.all().delete()
@@ -155,78 +155,104 @@ class FileUploadViewSet(viewsets.ViewSet):
                 equipaments = dict()
                 for row in reader:
                     #Carrega as categorias
-                    category = row['Material'].split('-')[1]
-                    try:
-                        if category:
-                            c = Category(name=category)
-                            c.save()
-                    except Exception:
-                        pass
+                    c = row['Material'].split('-')[1]
+                    category = CategorySerializer(data={'name': c})
+                    c_url = None
+                    if category.is_valid():
+                        category = category.save() #Retorna uma instância de Category
+                        c_url = 'http://127.0.0.1:8000/categories/{0}/'.format(category.id)
+                    else:
+                        category = Category.objects.get(name=c[1:])
+                        c_url = 'http://127.0.0.1:8000/categories/{0}/'.format(category.id)
+
                     #Carrega os andares
-                    floor = row['U.L.'].split('-')[2]
-                    if ("ANDAR" in floor) or (("TÉRREO") in floor):
-                        try:
-                            floor = floor.split(',')[1]
-                            if floor:
-                                f = Floor(name=floor)
-                                f.save()
-                        except Exception:
-                            pass
-                    #Carrega as UAs
-                    ua = row['U.A.'].split('-')
+                    f_url = None
                     try:
-                        u = Ua(code=int(ua[0]), name=ua[1])
-                        floor = Floor.objects.get(name=floor)
-                        u.floor = floor
-                        u.save()
+                        f = row['U.L.'].split('-')[2]
+                        if ("ANDAR" in f) or (("TÉRREO") in f):
+                            f = f.split(',')[1]
+                            floor = FloorSerializer(data={'name':f})
+                            if floor.is_valid():
+                                floor = floor.save() #Retorna uma instância de Floor
+                                f_url = 'http://127.0.0.1:8000/floors/{0}/'.format(floor.id)
+                            else:
+                                floor = Floor.objects.get(name=f[2:])
+                                print(row['U.L.'].split('-')[2].split(','))
+                                f_url = 'http://127.0.0.1:8000/floors/{0}/'.format(floor.id)
+            
                     except Exception:
                         pass
 
+                    #Carrega as UAs
+                    u = row['U.A.'].split('-')
+                    u_url = None
+                    if f_url != None:
+                        ua = UaSerializer(data={'code':u[0], 'name':u[1], 'floor':f_url})
+                    else:
+                        ua = UaSerializer(data={'code':u[0], 'name':u[1]})
+                    if ua.is_valid():
+                        ua = ua.save() #Retorna uma instância de Ua
+                        u_url = 'http://127.0.0.1:8000/uas/{0}/'.format(ua.id)
+                    else:
+                        try:
+                            ua = Ua.objects.get(code=u[0])
+                            u_url = 'http://127.0.0.1:8000/uas/{0}/'.format(ua.id)
+                        except Exception:
+                            ua = None
+
                     #Carrega as marcas
-                    brand = row['Marca']
-                    try:
-                        if brand:
-                            b = Brand(name=brand)
-                            b.save()
-                    except Exception:
-                        pass
+                    b = row['Marca']
+                    b_url = None
+                    brand = BrandSerializer(data={'name':b})
+                    if brand.is_valid():
+                        brand = brand.save() #Retorna uma instância de Brand
+                        b_url = 'http://127.0.0.1:8000/brands/{0}/'.format(brand.id)
+                    else:
+                        try:
+                            brand = Brand.objects.get(name=b)
+                            b_url = 'http://127.0.0.1:8000/brands/{0}/'.format(brand.id)
+                        except Exception:
+                            brand = None
+
                     #Carrega os modelos
-                    model = row['Modelo']
-                    try:
-                        if model:
-                            m = Model(name=model)
-                            m.save()
-                    except Exception:
-                        pass
-                    #Carrega os equipamentos
+                    m = row['Modelo']
+                    m_url = None
+                    model = ModelSerializer(data={'name':m})
+                    if model.is_valid():
+                        model = model.save() #Retorna uma instância de Model
+                        m_url = 'http://127.0.0.1:8000/models/{0}/'.format(model.id)
+                    else:
+                        try:
+                            model = Model.objects.get(name=m)
+                            m_url = 'http://127.0.0.1:8000/models/{0}/'.format(model.id)
+                        except:
+                            model = None
+
+                    #Carrega os equipamentos/computadores
                     patrimony = row['Patrimônio']
-                    warranty = row['Garantia'].split('-')
+                    warranty = row['Garantia'].split(' ')
                     if len(warranty) == 6:
-                        start = warranty[0]+'/'+warranty[1]+'/'+warranty[2]
-                        end = warranty[3]+'/'+warranty[4]+'/'+warranty[5]
+                        start = warranty[0]
+                        end = warranty[2]
                     else:
                         start = end = None
-                    equipaments[patrimony] = [brand, category, model, None, start, end, ua, floor, None, None, False, False, False, False]
+                    acquisition_value = float(row['Valor Aquisição(R$)'].replace('.', '').replace(',', '.'))
+                    if (c_url != None) and ("MICROCOMPUTADOR" in category.name): #Primeiro verifica se category existe
+                        computer = ComputerSerializer(data={'patrimony':patrimony, 'brand':b_url, 'category':c_url,'model':m_url, 'warranty_start':start, 'warranty_end':end, 'ua':u_url, 'floor':f_url, 'acquisition_value':acquisition_value})
+                        if computer.is_valid():
+                            computer.save()
+                    else:
+                        equipament = EquipamentSerializer(data={'patrimony':patrimony, 'brand':b_url, 'category':c_url, 'model':m_url, 'warranty_start':start, 'warranty_end':end, 'ua':u_url, 'floor':f_url, 'acquisition_value':acquisition_value})
+                        if equipament.is_valid():
+                            equipament.save()
+                        else:
+                            pass
+                            #print(row)
+                            #print(equipament.errors)
             
             #Colocar cada dada em suas determinadas tabelas do banco.
 
             return Response("O upload foi concluido com sucesso.", status=204)
-        except Exception:
-            return Response("O upload não foi concluido com sucesso.", status=400)
-    """
-    def list(self, request):
-        pass
-
-    def retrieve(self, request, pk=None):
-        pass
-
-    def update(self, request, pk=None):
-        pass
-
-    def partial_update(self, request, pk=None):
-        pass
-
-    def destroy(self, request, pk=None):
-        pass
-    """
+        except Exception as e:
+            return Response("O upload não foi concluido com sucesso. {0}".format(e), status=400)
     
