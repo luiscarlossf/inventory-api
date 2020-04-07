@@ -104,7 +104,7 @@ class Computer(Equipament):
     Modelo representando um computador
     """
     
-    policy = models.BooleanField("Política", default=False, help_text="Marque se o computador está na política da procuradoria.")
-    status_zenworks = models.BooleanField("Status do Zenworks", default=False, help_text="Marque se o computador está sendo monitorado pelo Zenworks.")
-    status_trend = models.BooleanField("Status do TREND", default=False, help_text="Marque se o computador está sendo monitorado pelo TREND.")
-    status_wsus = models.BooleanField("Status do WSUS", default=False, help_text="Marque se o computador está sendo monitorado pelo WSUS.")
+    policy = models.BooleanField("Política", default=False, blank=True, null=True, help_text="Marque se o computador está na política da procuradoria.")
+    status_zenworks = models.BooleanField("Status do Zenworks", default=False, blank=True, null=True, help_text="Marque se o computador está sendo monitorado pelo Zenworks.")
+    status_trend = models.BooleanField("Status do TREND", default=False, blank=True, null=True, help_text="Marque se o computador está sendo monitorado pelo TREND.")
+    status_wsus = models.BooleanField("Status do WSUS", default=False, blank=True, null=True, help_text="Marque se o computador está sendo monitorado pelo WSUS.")
