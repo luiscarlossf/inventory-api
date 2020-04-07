@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from .models import Brand, Category, Computer, Equipament, Floor, Model, Ua
 from rest_framework import viewsets, filters
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import UserSerializer, GroupSerializer, BrandSerializer, CategorySerializer, \
@@ -59,7 +60,7 @@ class ComputerViewSet(viewsets.ModelViewSet):
     queryset = Computer.objects.all()
     serializer_class = ComputerSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['patrimony', 'brand', 'model']
     ordering = ['patrimony']
     filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status', 'policy', 'status_zenworks', 'status_trend', 'status_wsus']
@@ -73,7 +74,7 @@ class EquipamentViewSet(viewsets.ModelViewSet):
     queryset = Equipament.objects.all()
     serializer_class = EquipamentSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['patrimony', 'brand', 'model']
     ordering = ['patrimony']
     filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status']
@@ -152,7 +153,7 @@ class FileUploadViewSet(viewsets.ViewSet):
                 Ua.objects.all().delete()
 
                 reader = csv.DictReader(csvfile, delimiter=';')
-                equipaments = dict()
+
                 for row in reader:
                     #Carrega as categorias
                     c = row['Material'].split('-')[1]
@@ -168,9 +169,9 @@ class FileUploadViewSet(viewsets.ViewSet):
                     #Carrega os andares
                     f_url = None
                     try:
-                        f = row['U.L.'].split('-')[2]
+                        f = row['U.L.'].split('-')[2] 
                         if ("ANDAR" in f) or (("TÉRREO") in f):
-                            f = f.split(',')[1]
+                            f = f.split(',')[1] 
                             floor = FloorSerializer(data={'name':f})
                             if floor.is_valid():
                                 floor = floor.save() #Retorna uma instância de Floor
@@ -245,13 +246,7 @@ class FileUploadViewSet(viewsets.ViewSet):
                         equipament = EquipamentSerializer(data={'patrimony':patrimony, 'brand':b_url, 'category':c_url, 'model':m_url, 'warranty_start':start, 'warranty_end':end, 'ua':u_url, 'floor':f_url, 'acquisition_value':acquisition_value})
                         if equipament.is_valid():
                             equipament.save()
-                        else:
-                            pass
-                            #print(row)
-                            #print(equipament.errors)
             
-            #Colocar cada dada em suas determinadas tabelas do banco.
-
             return Response("O upload foi concluido com sucesso.", status=204)
         except Exception as e:
             return Response("O upload não foi concluido com sucesso. {0}".format(e), status=400)
