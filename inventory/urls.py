@@ -15,24 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers 
-from api.views import BrandViewSet, CategoryViewSet, ComputerViewSet, EquipamentViewSet, \
-    FloorViewSet, GroupViewSet, ModelViewSet, UaViewSet, UserViewSet, FileUploadViewSet
 
-router = routers.DefaultRouter()
-router.register(r'brands', BrandViewSet)
-router.register(r'categories', CategoryViewSet)
-router.register(r'computers', ComputerViewSet)
-router.register(r'equipaments', EquipamentViewSet)
-router.register(r'floors', FloorViewSet)
-router.register(r'groups', GroupViewSet)
-router.register(r'models', ModelViewSet)
-router.register(r'uas', UaViewSet)
-router.register(r'users', UserViewSet)
-router.register(r'uploads', FileUploadViewSet, basename='uploads')
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    path('', include('api.urls')),
     path('api-auth/', include('rest_framework.urls')), #Add REST framework's login an logout views
 ]
