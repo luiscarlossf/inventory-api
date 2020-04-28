@@ -16,7 +16,7 @@ router.register(r'uas', UaViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'uploads', FileUploadViewSet, basename='uploads')
 
-print(api_settings.DEFAULT_VERSION)
+
 urlpatterns = [ 
     url(r'^v1/', include((router.urls, 'v1'), namespace='v1')),
     ]
