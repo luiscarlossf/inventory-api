@@ -33,11 +33,20 @@ class BrandViewSet(viewsets.ModelViewSet):
     """
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -46,11 +55,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
 class ComputerViewSet(viewsets.ModelViewSet):
@@ -59,13 +77,21 @@ class ComputerViewSet(viewsets.ModelViewSet):
     """
     queryset = Computer.objects.all()
     serializer_class = ComputerSerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['patrimony', 'brand', 'model']
     ordering = ['patrimony']
     filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status', 'policy', 'status_zenworks', 'status_trend', 'status_wsus']
     search_fields = ['patrimony']
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class EquipamentViewSet(viewsets.ModelViewSet):
     """
@@ -73,13 +99,21 @@ class EquipamentViewSet(viewsets.ModelViewSet):
     """
     queryset = Equipament.objects.all()
     serializer_class = EquipamentSerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['patrimony', 'brand', 'model']
     ordering = ['patrimony']
     filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status']
     search_fields = ['patrimony']
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class FloorViewSet(viewsets.ModelViewSet):
     """
@@ -87,12 +121,20 @@ class FloorViewSet(viewsets.ModelViewSet):
     """
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class ModelViewSet(viewsets.ModelViewSet):
     """
@@ -100,12 +142,20 @@ class ModelViewSet(viewsets.ModelViewSet):
     """
     queryset = Model.objects.all()
     serializer_class = ModelSerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class UaViewSet(viewsets.ModelViewSet):
     """
@@ -113,12 +163,22 @@ class UaViewSet(viewsets.ModelViewSet):
     """
     queryset = Ua.objects.all()
     serializer_class = UaSerializer
-    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ['name']
     ordering = ['name']
     filterset_fields = ['floor']
     search_fields = ['code', 'name']
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if (self.action == 'create') or (self.action == 'destroy'):
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
 
 class FileUploadViewSet(viewsets.ViewSet):
     """
