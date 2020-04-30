@@ -28,8 +28,8 @@ class Ua(models.Model):
     """
     Modelo representando uma unidade administrativa da Procuradoria da República.
     """
-    code = models.IntegerField("Código da UA", unique=True, help_text="Insira o código da unidade administrativa.")
-    name = models.CharField("Nome da UA", max_length=200, help_text="Insira o nome da unidade administrativa.")
+    code = models.CharField("Código da UA", unique=True, max_length=8, help_text="Insira o código da unidade administrativa.")
+    name = models.CharField("Nome da UA", unique=True, max_length=200, help_text="Insira o nome da unidade administrativa.")
     floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, null=True, help_text="Selecione o andar da unidade administrativa.")
 
     def __str__(self):
