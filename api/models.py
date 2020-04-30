@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class Category(models.Model):
     """
@@ -86,6 +87,11 @@ class Equipament(models.Model):
     )
 
     status = models.CharField("Status de uso", max_length=1, choices=_STATUS, default='u')
+
+    def clean(self):
+        #Não permite que sejam adicionadas datas de garantias sem lógica.
+        if (self.warranty_start and self.warranty_end) and (self.warranty_start > self.warranty_end):
+            raise ValidationError({"warranty_end":_("Data de fim de garantia menor que a data de início de garantia.")})
 
     def __str__(self):
         """
