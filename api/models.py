@@ -31,7 +31,7 @@ class Ua(models.Model):
     """
     code = models.CharField("Código da UA", unique=True, max_length=8, help_text="Insira o código da unidade administrativa.")
     name = models.CharField("Nome da UA", unique=True, max_length=200, help_text="Insira o nome da unidade administrativa.")
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, blank=True, null=True, help_text="Selecione o andar da unidade administrativa.")
+    floor = models.ForeignKey(Floor, on_delete=models.SET_NULL, blank=True, null=True, help_text="Selecione o andar da unidade administrativa.")
 
     def __str__(self):
         """
@@ -73,7 +73,7 @@ class Equipament(models.Model):
     model = models.ForeignKey(Model, verbose_name="Modelo", blank=True, null=True, on_delete=models.PROTECT, help_text="Selecione o modelo do equipamento.")
     warranty_start = models.DateField("Início da Garantia", null=True, blank=True)
     warranty_end = models.DateField("Fim da Garantia", null=True, blank=True)
-    ua = models.ForeignKey(Ua, on_delete=models.SET_NULL, verbose_name="Unidade Administrativa",null=True, blank=True, help_text="Selecione a unidade administrativa onde o equipamento se encontra.")
+    ua = models.ForeignKey(Ua, on_delete=models.PROTECT, verbose_name="Unidade Administrativa",null=True, blank=True, help_text="Selecione a unidade administrativa onde o equipamento se encontra.")
     floor = models.ForeignKey(Floor, on_delete=models.SET_NULL, verbose_name="Andar", null=True, blank=True, help_text="Selecione o andar em que o equipamento se encontra.")
     acquisition_date = models.DateField("Data de Aquisição", null=True, blank=True)
     acquisition_value = models.FloatField("Valor de Aquisição", null=True, blank=True)
