@@ -263,7 +263,7 @@ class AccountsTests(APITestCase):
         response = client.post('http://127.0.0.1:8000/v1/brands', json, format='json')
         self.assertEqual(response.status_code, 201)
 
-    def test_only_admin_read_users_data(sef):
+    def test_only_admin_read_users_data(self):
         '''
         Apenas administradores podem visualizar os usuários cadastrados
         no sistema. 
@@ -277,7 +277,7 @@ class AccountsTests(APITestCase):
         client.logout()
         client.login(username='testadmin', password='testadmin2020')
         response = client.get('http://127.0.0.1:8000/v1/users')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
 class ResourceTests(APITestCase):
     def setUp(self):
