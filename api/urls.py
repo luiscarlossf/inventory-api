@@ -4,7 +4,7 @@ from rest_framework.settings import api_settings
 from .views import BrandViewSet, CategoryViewSet, ComputerViewSet, EquipamentViewSet, \
     FloorViewSet, GroupViewSet, ModelViewSet, UaViewSet, UserViewSet, FileUploadViewSet
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'brands', BrandViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'computers', ComputerViewSet)
