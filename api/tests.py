@@ -365,33 +365,69 @@ class ResourceTests(APITestCase):
         '''
         Assegura que não seja removida uma marca que pertença a um equipamento.
         '''
-        #brand_id = Brand.objects.get(name="Marca1").id
-        #client = APIClient()
-        #token = Token.objects.get(user__username='testadmin')
-        #client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        #response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
-        #self.assertEqual(response.status_code, 500)
-        #brand_id = Brand.objects.get(name="Marca3").id
-        #response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
-        #self.assertEqual(response.status_code, 204)
+        brand_id = Brand.objects.get(name="Marca1").id
+        client = APIClient()
+        token = Token.objects.get(user__username='testadmin')
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
+        self.assertEqual(response.status_code, 405)
+        Equipament.objects.get(patrimony="12345678").delete()
+        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
+        self.assertEqual(response.status_code, 204)
+        brand_id = Brand.objects.get(name="Marca3").id
+        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
+        self.assertEqual(response.status_code, 204)
 
     def test_remove_category_in_use(self):
         '''
         Assegura que não seja removida uma categoria que pertença a um equipamento.
         '''
-        pass
+        category_id = Category.objects.get(name="Categoria1").id
+        client = APIClient()
+        token = Token.objects.get(user__username='testadmin')
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = client.delete('http://127.0.0.1:8000/v1/categories/'+str(category_id))
+        self.assertEqual(response.status_code, 405)
+        Equipament.objects.get(patrimony="12345678").delete()
+        response = client.delete('http://127.0.0.1:8000/v1/categories/'+str(category_id))
+        self.assertEqual(response.status_code, 204)
+        category_id = Category.objects.get(name="Categoria3").id
+        response = client.delete('http://127.0.0.1:8000/v1/categories/'+str(category_id))
+        self.assertEqual(response.status_code, 204)
 
     def test_remove_model_in_use(self):
         '''
         Assegura que não seja removida um modelo que pertença a um equipamento.
         '''
-        pass
+        model_id = Model.objects.get(name="Modelo1").id
+        client = APIClient()
+        token = Token.objects.get(user__username='testadmin')
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = client.delete('http://127.0.0.1:8000/v1/models/'+str(model_id))
+        self.assertEqual(response.status_code, 405)
+        Equipament.objects.get(patrimony="12345678").delete()
+        response = client.delete('http://127.0.0.1:8000/v1/models/'+str(model_id))
+        self.assertEqual(response.status_code, 204)
+        model_id = Model.objects.get(name="Modelo3").id
+        response = client.delete('http://127.0.0.1:8000/v1/models/'+str(model_id))
+        self.assertEqual(response.status_code, 204)
 
     def test_remove_ua_in_use(self):
         '''
         Assegura que não seja removida uma unidade administrativa que pertença a um equipamento.
         '''
-        pass
+        ua_id = Ua.objects.get(code="1").id
+        client = APIClient()
+        token = Token.objects.get(user__username='testadmin')
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = client.delete('http://127.0.0.1:8000/v1/uas/'+str(ua_id))
+        self.assertEqual(response.status_code, 405)
+        Equipament.objects.get(patrimony="12345678").delete()
+        response = client.delete('http://127.0.0.1:8000/v1/uas/'+str(ua_id))
+        self.assertEqual(response.status_code, 204)
+        ua_id = Ua.objects.get(code="3").id
+        response = client.delete('http://127.0.0.1:8000/v1/uas/'+str(ua_id))
+        self.assertEqual(response.status_code, 204)
 
 class EquipamentsTests(APITestCase):
     def setUp(self):
