@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from rest_framework.exceptions import MethodNotAllowed
 
 class Category(models.Model):
     """
@@ -12,6 +13,15 @@ class Category(models.Model):
         String representanda a categoria.
         """
         return self.name
+    
+    def delete(self):
+        equipaments = Equipament.objects.filter(category__name=self.name)
+        computers = Computer.objects.filter(category__name=self.name)
+        if (len(equipaments) != 0) or (len(computers)!=0):
+            raise MethodNotAllowed('DELETE',detail="O recurso está sendo usado por outro.")
+        else:
+            category = Category.objects.filter(name=self.name)
+            category.delete()
 
 class Floor(models.Model):
     """
@@ -24,6 +34,16 @@ class Floor(models.Model):
         String representanda o andar.
         """
         return self.name
+    
+    def delete(self):
+        equipaments = Equipament.objects.filter(floor__name=self.name)
+        computers = Computer.objects.filter(floor__name=self.name)
+        uas = Ua.objects.filter(floor__name=self.name)
+        if (len(equipaments) != 0) or (len(computers)!=0) or (len(uas) != 0):
+            raise MethodNotAllowed('DELETE',detail="O recurso está sendo usado por outro.")
+        else:
+            floor = Floor.objects.filter(name=self.name)
+            floor.delete()
 
 class Ua(models.Model):
     """
@@ -38,6 +58,15 @@ class Ua(models.Model):
         String representanda a unidade administrativa.
         """
         return self.name
+    
+    def delete(self):
+        equipaments = Equipament.objects.filter(ua__name=self.name)
+        computers = Computer.objects.filter(ua__name=self.name)
+        if (len(equipaments) != 0) or (len(computers)!=0):
+            raise MethodNotAllowed('DELETE',detail="O recurso está sendo usado por outro.")
+        else:
+            ua = Ua.objects.filter(name=self.name)
+            ua.delete()
 
 class Brand(models.Model):
     """
@@ -50,6 +79,15 @@ class Brand(models.Model):
         String representanda a marca.
         """
         return self.name
+    
+    def delete(self):
+        equipaments = Equipament.objects.filter(brand__name=self.name)
+        computers = Computer.objects.filter(brand__name=self.name)
+        if (len(equipaments) != 0) or (len(computers)!=0):
+            raise MethodNotAllowed('DELETE',detail="O recurso está sendo usado por outro.")
+        else:
+            brand = Brand.objects.filter(name=self.name)
+            brand.delete()
 
 class Model(models.Model):
     """
@@ -62,6 +100,15 @@ class Model(models.Model):
         String representanda o modelo.
         """
         return self.name
+    
+    def delete(self):
+        equipaments = Equipament.objects.filter(model__name=self.name)
+        computers = Computer.objects.filter(model__name=self.name)
+        if (len(equipaments) != 0) or (len(computers)!=0):
+            raise MethodNotAllowed('DELETE',detail="O recurso está sendo usado por outro.")
+        else:
+            model = Model.objects.filter(name=self.name)
+            model.delete()
 
 class Equipament(models.Model):
     """
