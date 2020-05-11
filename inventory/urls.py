@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views
+import logging
+
+logger = logging.getLogger("django")
+
+logger.debug("Configurando rotas...")
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
@@ -23,3 +28,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')), #Add REST framework's login an logout views
     path('api-token-auth/', views.obtain_auth_token),
 ]
+
+logger.debug("Rotas 'admin/', '/', 'api-auth/', 'api-token-auth/' configuradas.")
