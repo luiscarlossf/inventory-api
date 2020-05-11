@@ -49,7 +49,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -72,10 +71,6 @@ TEMPLATES = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.RemoteUserBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
 WSGI_APPLICATION = 'inventory.wsgi.application'
 
 
@@ -153,7 +148,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer'
     ],
 }
-
+print(BASE_DIR)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -179,7 +174,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': './logs/debug.log',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
             'maxBytes': 5120,
             'formatter': 'verbose',
         },
