@@ -148,7 +148,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer'
     ],
 }
-print(BASE_DIR)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
