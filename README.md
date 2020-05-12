@@ -1,5 +1,6 @@
 # Inventory API
 ![Django CI](https://github.com/luiscarlossf/inventory-api/workflows/Django%20CI/badge.svg)
+
 O back-end do sistema de levantamento dos equipamentos do MPF/PI.
 
 ## Getting Started
