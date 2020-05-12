@@ -4,6 +4,9 @@ from rest_framework.settings import api_settings
 from .views import BrandViewSet, CategoryViewSet, ComputerViewSet, EquipamentViewSet, \
     FloorViewSet, GroupViewSet, ModelViewSet, UaViewSet, UserViewSet, FileUploadViewSet
 
+#A versão padrão da API 
+DEFAULT_VERSION = str(api_settings.DEFAULT_VERSION)
+
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'brands', BrandViewSet)
 router.register(r'categories', CategoryViewSet)
@@ -18,5 +21,5 @@ router.register(r'uploads', FileUploadViewSet, basename='uploads')
 
 
 urlpatterns = [ 
-    url(r'^v1/', include((router.urls, 'v1'), namespace='v1')),
+    url(r'^'+ DEFAULT_VERSION+'/', include((router.urls, DEFAULT_VERSION), namespace=DEFAULT_VERSION)),
     ]

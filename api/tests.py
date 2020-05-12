@@ -1,4 +1,5 @@
 import datetime
+from rest_framework.settings import api_settings
 from django.test import TestCase, TransactionTestCase, Client
 from rest_framework.test import APIClient, URLPatternsTestCase, APIRequestFactory, APITestCase
 from rest_framework.authtoken.models import Token
@@ -6,6 +7,9 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import UserManager, User
 from .models import Brand, Category, Computer, Equipament, Floor, Model, Ua
+
+#A versão padrão da API 
+DEFAULT_VERSION = str(api_settings.DEFAULT_VERSION)
 
 #### TESTE DE MODELOS ###########
 class BrandModelTests(TransactionTestCase):
@@ -198,7 +202,7 @@ class AccountsTests(APITestCase):
         '''
         client = APIClient()
         client.login(username='test', password='test2020')
-        response = client.get('http://127.0.0.1:8000/v1/brands')
+        response = client.get('/' + DEFAULT_VERSION + '/brands')
         self.assertEqual(response.status_code, 200)
 
     def test_auth_user_token(self):
@@ -208,7 +212,7 @@ class AccountsTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='test')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.get('http://127.0.0.1:8000/v1/brands')
+        response = client.get('/' + DEFAULT_VERSION + '/brands')
         self.assertEqual(response.status_code, 200)
 
     def test_auth_admin_login(self) :
@@ -217,7 +221,7 @@ class AccountsTests(APITestCase):
         '''
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.get('http://127.0.0.1:8000/v1/users')
+        response = client.get('/' + DEFAULT_VERSION + '/users')
         self.assertEqual(response.status_code, 200)
         client.logout()
 
@@ -228,7 +232,7 @@ class AccountsTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.get('http://127.0.0.1:8000/v1/users')
+        response = client.get('/' + DEFAULT_VERSION + '/users')
         self.assertEqual(response.status_code, 200)
 
     def test_only_delete_with_admin(self):
@@ -237,14 +241,14 @@ class AccountsTests(APITestCase):
         '''
         client = APIClient()
         brand = Brand.objects.get(name="Marca Test")
-        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand.id))
+        response = client.delete('/' + DEFAULT_VERSION + '/brands/'+str(brand.id))
         self.assertEqual(response.status_code, 401)
         client.login(username='test', password='test2020')
-        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand.id))
+        response = client.delete('/' + DEFAULT_VERSION + '/brands/'+str(brand.id))
         self.assertEqual(response.status_code, 403)
         client.logout()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand.id))
+        response = client.delete('/' + DEFAULT_VERSION + '/brands/'+str(brand.id))
         self.assertEqual(response.status_code, 204)
 
     def test_only_create_with_admin(self):
@@ -253,14 +257,14 @@ class AccountsTests(APITestCase):
         '''
         json = {"name": "Marca Test2"}
         client = APIClient()
-        response = client.post('http://127.0.0.1:8000/v1/brands', json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/brands', json, format='json')
         self.assertEqual(response.status_code, 401)
         client.login(username='test', password='test2020')
-        response = client.post('http://127.0.0.1:8000/v1/brands', json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/brands', json, format='json')
         self.assertEqual(response.status_code, 403)
         client.logout()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/brands', json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/brands', json, format='json')
         self.assertEqual(response.status_code, 201)
 
     def test_only_admin_read_users_data(self):
@@ -269,14 +273,14 @@ class AccountsTests(APITestCase):
         no sistema. 
         '''
         client = APIClient()
-        response = client.get('http://127.0.0.1:8000/v1/users')
+        response = client.get('/' + DEFAULT_VERSION + '/users')
         self.assertEqual(response.status_code, 401)
         client.login(username='test', password='test2020')
-        response = client.get('http://127.0.0.1:8000/v1/users')
+        response = client.get('/' + DEFAULT_VERSION + '/users')
         self.assertEqual(response.status_code, 403)
         client.logout()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.get('http://127.0.0.1:8000/v1/users')
+        response = client.get('/' + DEFAULT_VERSION + '/users')
         self.assertEqual(response.status_code, 200)
 
 class ResourceTests(APITestCase):
@@ -313,10 +317,10 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.post('http://127.0.0.1:8000/v1/brands', brand_json)
+        response = client.post('/' + DEFAULT_VERSION + '/brands', brand_json)
         self.assertEqual(response.status_code, 400)
         brand_json = {"name": "Marca2"}
-        response = client.post('http://127.0.0.1:8000/v1/brands', brand_json)
+        response = client.post('/' + DEFAULT_VERSION + '/brands', brand_json)
         self.assertEqual(response.status_code, 201)
 
     def test_add_category_unique(self):
@@ -327,10 +331,10 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.post('http://127.0.0.1:8000/v1/categories', category_json)
+        response = client.post('/' + DEFAULT_VERSION + '/categories', category_json)
         self.assertEqual(response.status_code, 400)
         category_json = {"name": "Categoria2"}
-        response = client.post('http://127.0.0.1:8000/v1/categories', category_json)
+        response = client.post('/' + DEFAULT_VERSION + '/categories', category_json)
         self.assertEqual(response.status_code, 201)
 
     def test_add_model_unique(self):
@@ -341,10 +345,10 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.post('http://127.0.0.1:8000/v1/models', model_json)
+        response = client.post('/' + DEFAULT_VERSION + '/models', model_json)
         self.assertEqual(response.status_code, 400)
         model_json = {"name": "Modelo2"}
-        response = client.post('http://127.0.0.1:8000/v1/models', model_json)
+        response = client.post('/' + DEFAULT_VERSION + '/models', model_json)
         self.assertEqual(response.status_code, 201)
 
     def test_add_floor_unique(self):
@@ -355,10 +359,10 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.post('http://127.0.0.1:8000/v1/floors', floor_json)
+        response = client.post('/' + DEFAULT_VERSION + '/floors', floor_json)
         self.assertEqual(response.status_code, 400)
         floor_json = {"name": "Marca2"}
-        response = client.post('http://127.0.0.1:8000/v1/floors', floor_json)
+        response = client.post('/' + DEFAULT_VERSION + '/floors', floor_json)
         self.assertEqual(response.status_code, 201)
 
     def test_remove_brand_in_use(self):
@@ -369,13 +373,13 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/brands/'+str(brand_id))
         self.assertEqual(response.status_code, 405)
         Equipament.objects.get(patrimony="12345678").delete()
-        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/brands/'+str(brand_id))
         self.assertEqual(response.status_code, 204)
         brand_id = Brand.objects.get(name="Marca3").id
-        response = client.delete('http://127.0.0.1:8000/v1/brands/'+str(brand_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/brands/'+str(brand_id))
         self.assertEqual(response.status_code, 204)
 
     def test_remove_category_in_use(self):
@@ -386,13 +390,13 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.delete('http://127.0.0.1:8000/v1/categories/'+str(category_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/categories/'+str(category_id))
         self.assertEqual(response.status_code, 405)
         Equipament.objects.get(patrimony="12345678").delete()
-        response = client.delete('http://127.0.0.1:8000/v1/categories/'+str(category_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/categories/'+str(category_id))
         self.assertEqual(response.status_code, 204)
         category_id = Category.objects.get(name="Categoria3").id
-        response = client.delete('http://127.0.0.1:8000/v1/categories/'+str(category_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/categories/'+str(category_id))
         self.assertEqual(response.status_code, 204)
 
     def test_remove_model_in_use(self):
@@ -403,13 +407,13 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.delete('http://127.0.0.1:8000/v1/models/'+str(model_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/models/'+str(model_id))
         self.assertEqual(response.status_code, 405)
         Equipament.objects.get(patrimony="12345678").delete()
-        response = client.delete('http://127.0.0.1:8000/v1/models/'+str(model_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/models/'+str(model_id))
         self.assertEqual(response.status_code, 204)
         model_id = Model.objects.get(name="Modelo3").id
-        response = client.delete('http://127.0.0.1:8000/v1/models/'+str(model_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/models/'+str(model_id))
         self.assertEqual(response.status_code, 204)
 
     def test_remove_ua_in_use(self):
@@ -420,13 +424,13 @@ class ResourceTests(APITestCase):
         client = APIClient()
         token = Token.objects.get(user__username='testadmin')
         client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = client.delete('http://127.0.0.1:8000/v1/uas/'+str(ua_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/uas/'+str(ua_id))
         self.assertEqual(response.status_code, 405)
         Equipament.objects.get(patrimony="12345678").delete()
-        response = client.delete('http://127.0.0.1:8000/v1/uas/'+str(ua_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/uas/'+str(ua_id))
         self.assertEqual(response.status_code, 204)
         ua_id = Ua.objects.get(code="3").id
-        response = client.delete('http://127.0.0.1:8000/v1/uas/'+str(ua_id))
+        response = client.delete('/' + DEFAULT_VERSION + '/uas/'+str(ua_id))
         self.assertEqual(response.status_code, 204)
 
 class EquipamentsTests(APITestCase):
@@ -461,15 +465,15 @@ class EquipamentsTests(APITestCase):
         aleatório.
         '''
         category = Category.objects.get(name="Categoria1")
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "http://127.0.0.1:8000/v1/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/equipaments', equipament_json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 400)
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "http://127.0.0.1:8000/v1/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/equipaments', equipament_json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 201)
 
     def test_add_equipament_with_same_patrimony(self):
@@ -477,15 +481,15 @@ class EquipamentsTests(APITestCase):
         Assegura que não sejam adicionados equipamentos com o mesmo patrimônios.
         '''
         category = Category.objects.get(name="Categoria1")
-        equipament_json = {"patrimony":"12345678","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "http://127.0.0.1:8000/v1/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345678","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/equipaments', equipament_json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 400)
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "http://127.0.0.1:8000/v1/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/equipaments', equipament_json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 201) 
 
     def test_add_equipament_with_warranty_conflict(self):
@@ -493,13 +497,13 @@ class EquipamentsTests(APITestCase):
         Assegura que não sejam adicionados equipamentos com datas de garantias conflitantes. 
         '''
         category = Category.objects.get(name="Categoria1")
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-05","warranty_end":"2020-05-03","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "http://127.0.0.1:8000/v1/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-05","warranty_end":"2020-05-03","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/equipaments', equipament_json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 400)
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "http://127.0.0.1:8000/v1/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
-        response = client.post('http://127.0.0.1:8000/v1/equipaments', equipament_json, format='json')
+        response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 201)
