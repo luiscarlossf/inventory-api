@@ -1,0 +1,4178 @@
+openapi: 3.0.2
+info:
+  title: Inventory API
+  description: | 
+    API para sistema de levantamento de equipamentos do MPF/PI.
+    # Introdução
+    # Especificação OpenAPI
+    # Autenticação
+    <SecurityDefinitions />
+  termsOfService: 
+  contact:
+    name: CTIC Support
+    url: http://www.mpf.mp.br/pi
+    email: ''
+  license:
+    name: GNU General Public License v3.0
+    url: https://github.com/luiscarlossf/inventory-api/blob/master/LICENSE
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/{basePath}
+    description: Servidor de desenvolvimento.
+    variables:
+      basePath:
+        #indica a versão da API 
+        default: 'v1'
+        enum:
+          - 'v1'
+paths:
+  /v1/brands:
+    get:
+      tags:
+      - Brand
+      operationId: listBrands
+      summary: Lista todas as marcas de equipamentos armazenadas no sistema.
+      description: Lista todas as marcas do equipamentos armazenadas no sistema que o usuário tem acesso.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          description: Insira o nome da marca.
+                          maxLength: 200
+                      required:
+                      - name
+          description: ''
+    post:
+      tags:
+      - Brand
+      summary: Adiciona uma nova marca de equipamentos ao sistema.
+      description: Cria uma nova marca de equipamentos no sistema.
+      operationId: createBrand
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id001
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da marca.
+                  maxLength: 200
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id001
+          multipart/form-data:
+            schema: *id001
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da marca.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+  /v1/brands/{id}:
+    get:
+      tags:
+      - Brand
+      summary: Retorna uma marca específica armazenada no sistema.
+      description: Retorna a marca identificada pelo o identificador no path, se ela existir.
+      operationId: retrieveBrand
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Brand.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da marca.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    put:
+      tags:
+      - Brand
+      summary: Atualiza todas as informações de uma marca.
+      description: Atualiza todas as informações de uma marca.
+      operationId: updateBrand
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Brand.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id002
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da marca.
+                  maxLength: 200
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id002
+          multipart/form-data:
+            schema: *id002
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da marca.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    patch:
+      tags:
+      - Brand
+      summary: Atualiza parcialmente as informações de uma marca.
+      description: Atualiza parcialmente as informações de uma marca.
+      operationId: partial_updateBrand
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this brand.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id003
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da marca.
+                  maxLength: 200
+          application/x-www-form-urlencoded:
+            schema: *id003
+          multipart/form-data:
+            schema: *id003
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da marca.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    delete:
+      tags:
+      - Brand
+      summary: Exclui uma marca do sistema.
+      description: Exclui uma marca do sistema.
+      operationId: destroyBrand
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this brand.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/categories:
+    get:
+      tags:
+      - Category
+      summary: Lista todas as categorias de equipamentos armazenadas no sistema.
+      description: Lista todas as categorias do equipamentos armazenadas no sistema que o usuário tem acesso.
+      operationId: listCategorys
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          description: Insira o nome da categoria.
+                          maxLength: 200
+                      required:
+                      - name
+          description: ''
+    post:
+      tags:
+      - Category
+      summary: Adiciona uma nova categoria de equipamentos ao sistema.
+      description: Cria uma nova categoria de equipamentos no sistema.
+      operationId: createCategory
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id004
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da categoria.
+                  maxLength: 200
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id004
+          multipart/form-data:
+            schema: *id004
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da categoria.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+  /v1/categories/{id}:
+    get:
+      tags:
+      - Category
+      summary: Retorna uma categoria específica armazenada no sistema.
+      description: Retorna a categoria identificada pelo o identificador no path, se ela existir.
+      operationId: retrieveCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Category.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da categoria.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    put:
+      tags:
+      - Category
+      summary: Atualiza todas as informações de uma categoria.
+      description: Atualiza todas as informações de uma categoria.
+      operationId: updateCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Category.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id005
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da categoria.
+                  maxLength: 200
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id005
+          multipart/form-data:
+            schema: *id005
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da categoria.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    patch:
+      tags:
+      - Category
+      summary: Atualiza parcialmente as informações de uma categoria.
+      description: Atualiza parcialmente as informações de uma categoria.
+      operationId: partial_updateCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Category.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id006
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da categoria.
+                  maxLength: 200
+          application/x-www-form-urlencoded:
+            schema: *id006
+          multipart/form-data:
+            schema: *id006
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da categoria.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    delete:
+      tags:
+      - Category
+      summary: Exclui uma categoria do sistema.
+      description: Exclui uma categoria do sistema.
+      operationId: destroyCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Category.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/computers:
+    get:
+      tags:
+      - Computer
+      summary: Lista todas os computadores armazenados no sistema.
+      description: Lista todos os computadores armazenados no sistema que o usuário tem acesso.
+      operationId: listComputers
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: policy
+        required: false
+        in: query
+        description: policy
+        schema:
+          type: string
+      - name: status_zenworks
+        required: false
+        in: query
+        description: status_zenworks
+        schema:
+          type: string
+      - name: status_trend
+        required: false
+        in: query
+        description: status_trend
+        schema:
+          type: string
+      - name: status_wsus
+        required: false
+        in: query
+        description: status_wsus
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        patrimony:
+                          type: string
+                          nullable: true
+                          description: "Insira o patrim\xF4nio do equipamento."
+                          maxLength: 8
+                        warranty_start:
+                          type: string
+                          format: date
+                          nullable: true
+                        warranty_end:
+                          type: string
+                          format: date
+                          nullable: true
+                        acquisition_date:
+                          type: string
+                          format: date
+                          nullable: true
+                        acquisition_value:
+                          type: number
+                          nullable: true
+                        status:
+                          enum:
+                          - u
+                          - a
+                          - e
+                          - s
+                          - d
+                        policy:
+                          type: boolean
+                          nullable: true
+                          description: "Marque se o computador est\xE1 na pol\xED\
+                            tica da procuradoria."
+                        status_zenworks:
+                          type: boolean
+                          nullable: true
+                          description: "Marque se o computador est\xE1 sendo monitorado\
+                            \ pelo Zenworks."
+                        status_trend:
+                          type: boolean
+                          nullable: true
+                          description: "Marque se o computador est\xE1 sendo monitorado\
+                            \ pelo TREND."
+                        status_wsus:
+                          type: boolean
+                          nullable: true
+                          description: "Marque se o computador est\xE1 sendo monitorado\
+                            \ pelo WSUS."
+                        brand:
+                          type: string
+                          nullable: true
+                          description: Selecione a marca do equipamento.
+                        category:
+                          type: string
+                          description: Selecione a categoria do equipamento.
+                        model:
+                          type: string
+                          nullable: true
+                          description: Selecione o modelo do equipamento.
+                        ua:
+                          type: string
+                          nullable: true
+                          description: Selecione a unidade administrativa onde o equipamento
+                            se encontra.
+                        floor:
+                          type: string
+                          nullable: true
+                          description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    post:
+      tags:
+      - Computer
+      summary: Adiciona um novo computador ao sistema.
+      description: Cria um novo computador ao sistema.
+      operationId: createComputer
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id007
+              properties:
+                patrimony:
+                  type: string
+                  nullable: true
+                  description: "Insira o patrim\xF4nio do equipamento."
+                  maxLength: 8
+                warranty_start:
+                  type: string
+                  format: date
+                  nullable: true
+                warranty_end:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_date:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_value:
+                  type: number
+                  nullable: true
+                status:
+                  enum:
+                  - u
+                  - a
+                  - e
+                  - s
+                  - d
+                policy:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 na pol\xEDtica da procuradoria."
+                status_zenworks:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ Zenworks."
+                status_trend:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ TREND."
+                status_wsus:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ WSUS."
+                brand:
+                  type: string
+                  nullable: true
+                  description: Selecione a marca do equipamento.
+                category:
+                  type: string
+                  description: Selecione a categoria do equipamento.
+                model:
+                  type: string
+                  nullable: true
+                  description: Selecione o modelo do equipamento.
+                ua:
+                  type: string
+                  nullable: true
+                  description: Selecione a unidade administrativa onde o equipamento
+                    se encontra.
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar em que o equipamento se encontra.
+          application/x-www-form-urlencoded:
+            schema: *id007
+          multipart/form-data:
+            schema: *id007
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  policy:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 na pol\xEDtica da\
+                      \ procuradoria."
+                  status_zenworks:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo Zenworks."
+                  status_trend:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo TREND."
+                  status_wsus:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo WSUS."
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+  /v1/computers/{id}:
+    get:
+      tags:
+      - Computer
+      summary: Retorna um computador específico armazenado no sistema.
+      description: Retorna o computador identificado pelo o identificador no path, se ele existir.
+      operationId: retrieveComputer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Computer.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: policy
+        required: false
+        in: query
+        description: policy
+        schema:
+          type: string
+      - name: status_zenworks
+        required: false
+        in: query
+        description: status_zenworks
+        schema:
+          type: string
+      - name: status_trend
+        required: false
+        in: query
+        description: status_trend
+        schema:
+          type: string
+      - name: status_wsus
+        required: false
+        in: query
+        description: status_wsus
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  policy:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 na pol\xEDtica da\
+                      \ procuradoria."
+                  status_zenworks:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo Zenworks."
+                  status_trend:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo TREND."
+                  status_wsus:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo WSUS."
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    put:
+      tags:
+      - Computer
+      summary: Atualiza todas as informações de um computador.
+      description: Atualiza todas as informações de um computador.
+      operationId: updateComputer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Computer.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: policy
+        required: false
+        in: query
+        description: policy
+        schema:
+          type: string
+      - name: status_zenworks
+        required: false
+        in: query
+        description: status_zenworks
+        schema:
+          type: string
+      - name: status_trend
+        required: false
+        in: query
+        description: status_trend
+        schema:
+          type: string
+      - name: status_wsus
+        required: false
+        in: query
+        description: status_wsus
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id008
+              properties:
+                patrimony:
+                  type: string
+                  nullable: true
+                  description: "Insira o patrim\xF4nio do equipamento."
+                  maxLength: 8
+                warranty_start:
+                  type: string
+                  format: date
+                  nullable: true
+                warranty_end:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_date:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_value:
+                  type: number
+                  nullable: true
+                status:
+                  enum:
+                  - u
+                  - a
+                  - e
+                  - s
+                  - d
+                policy:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 na pol\xEDtica da procuradoria."
+                status_zenworks:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ Zenworks."
+                status_trend:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ TREND."
+                status_wsus:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ WSUS."
+                brand:
+                  type: string
+                  nullable: true
+                  description: Selecione a marca do equipamento.
+                category:
+                  type: string
+                  description: Selecione a categoria do equipamento.
+                model:
+                  type: string
+                  nullable: true
+                  description: Selecione o modelo do equipamento.
+                ua:
+                  type: string
+                  nullable: true
+                  description: Selecione a unidade administrativa onde o equipamento
+                    se encontra.
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar em que o equipamento se encontra.
+          application/x-www-form-urlencoded:
+            schema: *id008
+          multipart/form-data:
+            schema: *id008
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  policy:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 na pol\xEDtica da\
+                      \ procuradoria."
+                  status_zenworks:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo Zenworks."
+                  status_trend:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo TREND."
+                  status_wsus:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo WSUS."
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    patch:
+      tags:
+      - Computer
+      summary: Atualiza parcialmente as informações de um computador.
+      description: Atualiza parcialmente as informações de um computador.
+      operationId: partial_updateComputer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Computer.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: policy
+        required: false
+        in: query
+        description: policy
+        schema:
+          type: string
+      - name: status_zenworks
+        required: false
+        in: query
+        description: status_zenworks
+        schema:
+          type: string
+      - name: status_trend
+        required: false
+        in: query
+        description: status_trend
+        schema:
+          type: string
+      - name: status_wsus
+        required: false
+        in: query
+        description: status_wsus
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id009
+              properties:
+                patrimony:
+                  type: string
+                  nullable: true
+                  description: "Insira o patrim\xF4nio do equipamento."
+                  maxLength: 8
+                warranty_start:
+                  type: string
+                  format: date
+                  nullable: true
+                warranty_end:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_date:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_value:
+                  type: number
+                  nullable: true
+                status:
+                  enum:
+                  - u
+                  - a
+                  - e
+                  - s
+                  - d
+                policy:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 na pol\xEDtica da procuradoria."
+                status_zenworks:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ Zenworks."
+                status_trend:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ TREND."
+                status_wsus:
+                  type: boolean
+                  nullable: true
+                  description: "Marque se o computador est\xE1 sendo monitorado pelo\
+                    \ WSUS."
+                brand:
+                  type: string
+                  nullable: true
+                  description: Selecione a marca do equipamento.
+                category:
+                  type: string
+                  description: Selecione a categoria do equipamento.
+                model:
+                  type: string
+                  nullable: true
+                  description: Selecione o modelo do equipamento.
+                ua:
+                  type: string
+                  nullable: true
+                  description: Selecione a unidade administrativa onde o equipamento
+                    se encontra.
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar em que o equipamento se encontra.
+          application/x-www-form-urlencoded:
+            schema: *id009
+          multipart/form-data:
+            schema: *id009
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  policy:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 na pol\xEDtica da\
+                      \ procuradoria."
+                  status_zenworks:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo Zenworks."
+                  status_trend:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo TREND."
+                  status_wsus:
+                    type: boolean
+                    nullable: true
+                    description: "Marque se o computador est\xE1 sendo monitorado\
+                      \ pelo WSUS."
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    delete:
+      tags:
+      - Computer
+      summary: Exclui um computador do sistema.
+      description: Exclui um computador do sistema.
+      operationId: destroyComputer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Computer.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: policy
+        required: false
+        in: query
+        description: policy
+        schema:
+          type: string
+      - name: status_zenworks
+        required: false
+        in: query
+        description: status_zenworks
+        schema:
+          type: string
+      - name: status_trend
+        required: false
+        in: query
+        description: status_trend
+        schema:
+          type: string
+      - name: status_wsus
+        required: false
+        in: query
+        description: status_wsus
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/equipaments:
+    get:
+      tags:
+      - Equipament
+      summary: Lista todos os equipamentos armazenados no sistema.
+      description: Lista todos os equipamentos armazenados no sistema que o usuário tem acesso.
+      operationId: listEquipaments
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        patrimony:
+                          type: string
+                          nullable: true
+                          description: "Insira o patrim\xF4nio do equipamento."
+                          maxLength: 8
+                        warranty_start:
+                          type: string
+                          format: date
+                          nullable: true
+                        warranty_end:
+                          type: string
+                          format: date
+                          nullable: true
+                        acquisition_date:
+                          type: string
+                          format: date
+                          nullable: true
+                        acquisition_value:
+                          type: number
+                          nullable: true
+                        status:
+                          enum:
+                          - u
+                          - a
+                          - e
+                          - s
+                          - d
+                        brand:
+                          type: string
+                          nullable: true
+                          description: Selecione a marca do equipamento.
+                        category:
+                          type: string
+                          description: Selecione a categoria do equipamento.
+                        model:
+                          type: string
+                          nullable: true
+                          description: Selecione o modelo do equipamento.
+                        ua:
+                          type: string
+                          nullable: true
+                          description: Selecione a unidade administrativa onde o equipamento
+                            se encontra.
+                        floor:
+                          type: string
+                          nullable: true
+                          description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    post:
+      tags:
+      - Equipament
+      summary: Adiciona um novo equipamento ao sistema.
+      description: Cria um novo equipamento ao sistema.
+      operationId: createEquipament
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id010
+              properties:
+                patrimony:
+                  type: string
+                  nullable: true
+                  description: "Insira o patrim\xF4nio do equipamento."
+                  maxLength: 8
+                warranty_start:
+                  type: string
+                  format: date
+                  nullable: true
+                warranty_end:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_date:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_value:
+                  type: number
+                  nullable: true
+                status:
+                  enum:
+                  - u
+                  - a
+                  - e
+                  - s
+                  - d
+                brand:
+                  type: string
+                  nullable: true
+                  description: Selecione a marca do equipamento.
+                category:
+                  type: string
+                  description: Selecione a categoria do equipamento.
+                model:
+                  type: string
+                  nullable: true
+                  description: Selecione o modelo do equipamento.
+                ua:
+                  type: string
+                  nullable: true
+                  description: Selecione a unidade administrativa onde o equipamento
+                    se encontra.
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar em que o equipamento se encontra.
+          application/x-www-form-urlencoded:
+            schema: *id010
+          multipart/form-data:
+            schema: *id010
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+  /v1/equipaments/{id}:
+    get:
+      tags:
+      - Equipament
+      summary: Retorna um equipamento específico armazenado no sistema.
+      description: Retorna o equipamento identificado pelo o identificador no path, se ele existir.
+      operationId: retrieveEquipament
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Equipament.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    put:
+      tags:
+      - Equipament
+      summary: Atualiza todas as informações de um equipamento
+      description: Atualiza todas as informações de um equipamento.
+      operationId: updateEquipament
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Equipament.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id011
+              properties:
+                patrimony:
+                  type: string
+                  nullable: true
+                  description: "Insira o patrim\xF4nio do equipamento."
+                  maxLength: 8
+                warranty_start:
+                  type: string
+                  format: date
+                  nullable: true
+                warranty_end:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_date:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_value:
+                  type: number
+                  nullable: true
+                status:
+                  enum:
+                  - u
+                  - a
+                  - e
+                  - s
+                  - d
+                brand:
+                  type: string
+                  nullable: true
+                  description: Selecione a marca do equipamento.
+                category:
+                  type: string
+                  description: Selecione a categoria do equipamento.
+                model:
+                  type: string
+                  nullable: true
+                  description: Selecione o modelo do equipamento.
+                ua:
+                  type: string
+                  nullable: true
+                  description: Selecione a unidade administrativa onde o equipamento
+                    se encontra.
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar em que o equipamento se encontra.
+          application/x-www-form-urlencoded:
+            schema: *id011
+          multipart/form-data:
+            schema: *id011
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    patch:
+      tags:
+      - Equipament
+      summary: Atualiza parcialmente as informações de um equipamento.
+      description: Atualiza parcialmente as informações de um equipamento.
+      operationId: partial_updateEquipament
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Equipament.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id012
+              properties:
+                patrimony:
+                  type: string
+                  nullable: true
+                  description: "Insira o patrim\xF4nio do equipamento."
+                  maxLength: 8
+                warranty_start:
+                  type: string
+                  format: date
+                  nullable: true
+                warranty_end:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_date:
+                  type: string
+                  format: date
+                  nullable: true
+                acquisition_value:
+                  type: number
+                  nullable: true
+                status:
+                  enum:
+                  - u
+                  - a
+                  - e
+                  - s
+                  - d
+                brand:
+                  type: string
+                  nullable: true
+                  description: Selecione a marca do equipamento.
+                category:
+                  type: string
+                  description: Selecione a categoria do equipamento.
+                model:
+                  type: string
+                  nullable: true
+                  description: Selecione o modelo do equipamento.
+                ua:
+                  type: string
+                  nullable: true
+                  description: Selecione a unidade administrativa onde o equipamento
+                    se encontra.
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar em que o equipamento se encontra.
+          application/x-www-form-urlencoded:
+            schema: *id012
+          multipart/form-data:
+            schema: *id012
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  patrimony:
+                    type: string
+                    nullable: true
+                    description: "Insira o patrim\xF4nio do equipamento."
+                    maxLength: 8
+                  warranty_start:
+                    type: string
+                    format: date
+                    nullable: true
+                  warranty_end:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  acquisition_value:
+                    type: number
+                    nullable: true
+                  status:
+                    enum:
+                    - u
+                    - a
+                    - e
+                    - s
+                    - d
+                  brand:
+                    type: string
+                    nullable: true
+                    description: Selecione a marca do equipamento.
+                  category:
+                    type: string
+                    description: Selecione a categoria do equipamento.
+                  model:
+                    type: string
+                    nullable: true
+                    description: Selecione o modelo do equipamento.
+                  ua:
+                    type: string
+                    nullable: true
+                    description: Selecione a unidade administrativa onde o equipamento
+                      se encontra.
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar em que o equipamento se encontra.
+          description: ''
+    delete:
+      tags:
+      - Equipament
+      summary: Exclui um equipamento do sistema.
+      description: Exclui um equipamento do sistema.
+      operationId: destroyEquipament
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Equipament.
+        schema:
+          type: string
+      - name: brand
+        required: false
+        in: query
+        description: brand
+        schema:
+          type: string
+      - name: category
+        required: false
+        in: query
+        description: category
+        schema:
+          type: string
+      - name: model
+        required: false
+        in: query
+        description: model
+        schema:
+          type: string
+      - name: warranty_start
+        required: false
+        in: query
+        description: warranty_start
+        schema:
+          type: string
+      - name: warranty_end
+        required: false
+        in: query
+        description: warranty_end
+        schema:
+          type: string
+      - name: ua
+        required: false
+        in: query
+        description: ua
+        schema:
+          type: string
+      - name: floor
+        required: false
+        in: query
+        description: floor
+        schema:
+          type: string
+      - name: acquisition_date
+        required: false
+        in: query
+        description: acquisition_date
+        schema:
+          type: string
+      - name: acquisition_value
+        required: false
+        in: query
+        description: acquisition_value
+        schema:
+          type: string
+      - name: status
+        required: false
+        in: query
+        description: status
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/floors:
+    get:
+      tags:
+      - Floor
+      summary: Lista todos os andares da instituição armazenados no sistema.
+      description: Lista todos os andares do prédio da instituição armazenadas no sistema que o usuário tem acesso.
+      operationId: listFloors
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                          maxLength: 100
+                      required:
+                      - name
+          description: ''
+    post:
+      tags:
+      - Floor
+      summary: Adiciona um novo andar ao sistema.
+      description: Cria um novo andar ao sistema.
+      operationId: createFloor
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id013
+              properties:
+                name:
+                  type: string
+                  description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                  maxLength: 100
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id013
+          multipart/form-data:
+            schema: *id013
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                    maxLength: 100
+                required:
+                - name
+          description: ''
+  /v1/floors/{id}:
+    get:
+      tags:
+      - Floor
+      summary: Retorna um andar específico armazenado no sistema.
+      description: Retorna o andar identificado pelo o identificador no path, se ele existir.
+      operationId: retrieveFloor
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Floor.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                    maxLength: 100
+                required:
+                - name
+          description: ''
+    put:
+      tags:
+      - Floor
+      summary: Atualiza todas as informações de um andar.
+      description: Atualiza todas as informações de um andar.
+      operationId: updateFloor
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Floor.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id014
+              properties:
+                name:
+                  type: string
+                  description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                  maxLength: 100
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id014
+          multipart/form-data:
+            schema: *id014
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                    maxLength: 100
+                required:
+                - name
+          description: ''
+    patch:
+      tags:
+      - Floor
+      summary: Atualiza parcialmente as informações de um andar.
+      description: Atualiza parcialmente as informações de um andar.
+      operationId: partial_updateFloor
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Floor.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id015
+              properties:
+                name:
+                  type: string
+                  description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                  maxLength: 100
+          application/x-www-form-urlencoded:
+            schema: *id015
+          multipart/form-data:
+            schema: *id015
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: "Insira a descri\xE7\xE3o do andar do pedrio."
+                    maxLength: 100
+                required:
+                - name
+          description: ''
+    delete:
+      tags:
+      - Floor
+      summary: Exclui um andar do sistema.
+      description: Exclui um andar do sistema.
+      operationId: destroyFloor
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Floor.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/groups:
+    get:
+      tags:
+      - Group
+      summary: Lista todos os grupos de usuários que tem acesso ao sistema.
+      description: Lista todos os grupos de usuários que tem acesso ao sistema, se o usuário corrente tiver permissão.
+      operationId: listGroups
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          maxLength: 150
+                      required:
+                      - name
+          description: ''
+    post:
+      tags:
+      - Group
+      summary: Adiciona um novo grupo ao sistema.
+      description: Cria um novo grupo ao sistema.
+      operationId: createGroup
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id016
+              properties:
+                name:
+                  type: string
+                  maxLength: 150
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id016
+          multipart/form-data:
+            schema: *id016
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+  /v1/groups/{id}:
+    get:
+      tags:
+      - Group
+      summary: Retorna um grupo específico armazenado no sistema.
+      description: Retorna o grupo identificado pelo o identificador no path, se ele existir.
+      operationId: retrieveGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this grupo.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+    put:
+      tags:
+      - Group
+      summary: Atualiza todas as informações de um grupo.
+      description: Atualiza todas as informações de um grupo.
+      operationId: updateGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this grupo.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id017
+              properties:
+                name:
+                  type: string
+                  maxLength: 150
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id017
+          multipart/form-data:
+            schema: *id017
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+    patch:
+      tags:
+      - Group
+      summary: Atualiza parcialmente as informações de um grupo.
+      description: Atualiza parcialmente as informações de um grupo.
+      operationId: partial_updateGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this grupo.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id018
+              properties:
+                name:
+                  type: string
+                  maxLength: 150
+          application/x-www-form-urlencoded:
+            schema: *id018
+          multipart/form-data:
+            schema: *id018
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    maxLength: 150
+                required:
+                - name
+          description: ''
+    delete:
+      tags:
+      - Group
+      summary: Exclui um grupo do sistema.
+      description: Exclui um grupo do sistema.
+      operationId: destroyGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this grupo.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/models:
+    get:
+      tags:
+      - Model
+      summary: Lista todos os modelos de equipamentos armazenados no sistema.
+      description: Lista todos os modelos de equipamentos armazenados no sistema que o usuário tem acesso.
+      operationId: listModels
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          description: Insira o nome da modelo.
+                          maxLength: 200
+                      required:
+                      - name
+          description: ''
+    post:
+      tags:
+      - Model
+      summary: Adiciona um novo modelo ao sistema.
+      description: Cria um novo modelo ao sistema.
+      operationId: createModel
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id019
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da modelo.
+                  maxLength: 200
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id019
+          multipart/form-data:
+            schema: *id019
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da modelo.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+  /v1/models/{id}:
+    get:
+      tags:
+      - Model
+      summary: Retorna um modelo específico armazenado no sistema.
+      description: Retorna o modelo identificado pelo o identificador no path, se ele existir.
+      operationId: retrieveModel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Model.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da modelo.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    put:
+      tags:
+      - Model
+      summary: Atualiza todas as informações de um modelo.
+      description: Atualiza todas as informações de um modelo.
+      operationId: updateModel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Model.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id020
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da modelo.
+                  maxLength: 200
+              required:
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id020
+          multipart/form-data:
+            schema: *id020
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da modelo.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    patch:
+      tags:
+      - Model
+      summary: Atualiza parcialmente as informações de um modelo.
+      description: Atualiza parcialmente as informações de um modelo.
+      operationId: partial_updateModel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Model.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id021
+              properties:
+                name:
+                  type: string
+                  description: Insira o nome da modelo.
+                  maxLength: 200
+          application/x-www-form-urlencoded:
+            schema: *id021
+          multipart/form-data:
+            schema: *id021
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  name:
+                    type: string
+                    description: Insira o nome da modelo.
+                    maxLength: 200
+                required:
+                - name
+          description: ''
+    delete:
+      tags:
+      - Model
+      summary: Exclui um modelo do sistema.
+      description: Exclui um modelo do sistema.
+      operationId: destroyModel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Model.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/uas:
+    get:
+      tags:
+      - Ua
+      summary: Lista todas as unidades administrativas da instituição.
+      description: Lista todas as unidades administrativas da instituição armazenadas no sistema que o usuário tem acesso.
+      operationId: listUas
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        code:
+                          type: string
+                          description: "Insira o c\xF3digo da unidade administrativa."
+                          maxLength: 8
+                        name:
+                          type: string
+                          description: Insira o nome da unidade administrativa.
+                          maxLength: 200
+                        floor:
+                          type: string
+                          nullable: true
+                          description: Selecione o andar da unidade administrativa.
+                      required:
+                      - code
+                      - name
+          description: ''
+    post:
+      tags:
+      - Ua
+      summary: Adiciona uma nova unidade administrativa ao sistema.
+      description: Cria uma nova unidade administrativa no sistema.
+      operationId: createUa
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id022
+              properties:
+                code:
+                  type: string
+                  description: "Insira o c\xF3digo da unidade administrativa."
+                  maxLength: 8
+                name:
+                  type: string
+                  description: Insira o nome da unidade administrativa.
+                  maxLength: 200
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar da unidade administrativa.
+              required:
+              - code
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id022
+          multipart/form-data:
+            schema: *id022
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  code:
+                    type: string
+                    description: "Insira o c\xF3digo da unidade administrativa."
+                    maxLength: 8
+                  name:
+                    type: string
+                    description: Insira o nome da unidade administrativa.
+                    maxLength: 200
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar da unidade administrativa.
+                required:
+                - code
+                - name
+          description: ''
+  /v1/uas/{id}:
+    get:
+      tags:
+      - Ua
+      summary: Retorna uma unidade administrativa específica armazenada no sistema.
+      description: Retorna a unidade administrativa identificada pelo o identificador no path, se ela existir.
+      operationId: retrieveUa
+        ou visualizadas.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Ua.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  code:
+                    type: string
+                    description: "Insira o c\xF3digo da unidade administrativa."
+                    maxLength: 8
+                  name:
+                    type: string
+                    description: Insira o nome da unidade administrativa.
+                    maxLength: 200
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar da unidade administrativa.
+                required:
+                - code
+                - name
+          description: ''
+    put:
+      tags:
+      - Ua
+      summary: Atualiza todas as informações de uma unidade administrativa.
+      description: Atualiza todas as informações de uma unidade administrativa.
+      operationId: updateUa
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Ua.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id023
+              properties:
+                code:
+                  type: string
+                  description: "Insira o c\xF3digo da unidade administrativa."
+                  maxLength: 8
+                name:
+                  type: string
+                  description: Insira o nome da unidade administrativa.
+                  maxLength: 200
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar da unidade administrativa.
+              required:
+              - code
+              - name
+          application/x-www-form-urlencoded:
+            schema: *id023
+          multipart/form-data:
+            schema: *id023
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  code:
+                    type: string
+                    description: "Insira o c\xF3digo da unidade administrativa."
+                    maxLength: 8
+                  name:
+                    type: string
+                    description: Insira o nome da unidade administrativa.
+                    maxLength: 200
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar da unidade administrativa.
+                required:
+                - code
+                - name
+          description: ''
+    patch:
+      tags:
+      - Ua
+      summary: Atualiza parcialmente as informações de uma unidade administrativa.
+      description: Atualiza parcialmente as informações de uma unidade administrativa.
+      operationId: partial_updateUa
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Ua.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id024
+              properties:
+                code:
+                  type: string
+                  description: "Insira o c\xF3digo da unidade administrativa."
+                  maxLength: 8
+                name:
+                  type: string
+                  description: Insira o nome da unidade administrativa.
+                  maxLength: 200
+                floor:
+                  type: string
+                  nullable: true
+                  description: Selecione o andar da unidade administrativa.
+          application/x-www-form-urlencoded:
+            schema: *id024
+          multipart/form-data:
+            schema: *id024
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  code:
+                    type: string
+                    description: "Insira o c\xF3digo da unidade administrativa."
+                    maxLength: 8
+                  name:
+                    type: string
+                    description: Insira o nome da unidade administrativa.
+                    maxLength: 200
+                  floor:
+                    type: string
+                    nullable: true
+                    description: Selecione o andar da unidade administrativa.
+                required:
+                - code
+                - name
+          description: ''
+    delete:
+      tags:
+      - Ua
+      summary: Exclui uma unidade administrativa do instituição.
+      description: Exclui uma unidade administrativa da instituição.
+      operationId: destroyUa
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this Ua.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/users:
+    get:
+      tags:
+      - User
+      summary: Lista todos os usuários que tem acesso ao sistema.
+      description: Lista todos os usuários que tem acesso ao sistema, se o usuário corrente tiver permissão.
+      operationId: listUsers
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type: string
+                          readOnly: true
+                        username:
+                          type: string
+                          description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras,\
+                            \ n\xFAmeros e @/./+/-/_ apenas."
+                          pattern: ^[\w.@+-]+\Z
+                          maxLength: 150
+                        email:
+                          type: string
+                          format: email
+                          maxLength: 254
+                        groups:
+                          type: array
+                          items:
+                            type: string
+                          description: "Os grupos que este usu\xE1rio pertence. Um\
+                            \ usu\xE1rio ter\xE1 todas as permiss\xF5es concedidas\
+                            \ a cada um dos seus grupos."
+                      required:
+                      - username
+          description: ''
+    post:
+      tags:
+      - User
+      summary: Adiciona um novo usuário ao sistema.
+      description: Cria um novo usuário ao sistema.
+      operationId: createUser
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: &id025
+              properties:
+                username:
+                  type: string
+                  description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras, n\xFA\
+                    meros e @/./+/-/_ apenas."
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                groups:
+                  type: array
+                  items:
+                    type: string
+                  description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                    rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos seus\
+                    \ grupos."
+              required:
+              - username
+          application/x-www-form-urlencoded:
+            schema: *id025
+          multipart/form-data:
+            schema: *id025
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras,\
+                      \ n\xFAmeros e @/./+/-/_ apenas."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                      rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos\
+                      \ seus grupos."
+                required:
+                - username
+          description: ''
+  /v1/users/{id}:
+    get:
+      tags:
+      - User
+      summary: Retorna um usuário específico armazenado no sistema.
+      description: Retorna o usuário identificado pelo o identificador no path, se ele existir.
+      operationId: retrieveUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "A unique integer value identifying this usu\xE1rio."
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras,\
+                      \ n\xFAmeros e @/./+/-/_ apenas."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                      rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos\
+                      \ seus grupos."
+                required:
+                - username
+          description: ''
+    put:
+      tags:
+      - User
+      summary: Atualiza todas as informações de um usuário.
+      description: Atualiza todas as informações de um usuário.
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "A unique integer value identifying this usu\xE1rio."
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id026
+              properties:
+                username:
+                  type: string
+                  description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras, n\xFA\
+                    meros e @/./+/-/_ apenas."
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                groups:
+                  type: array
+                  items:
+                    type: string
+                  description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                    rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos seus\
+                    \ grupos."
+              required:
+              - username
+          application/x-www-form-urlencoded:
+            schema: *id026
+          multipart/form-data:
+            schema: *id026
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras,\
+                      \ n\xFAmeros e @/./+/-/_ apenas."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                      rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos\
+                      \ seus grupos."
+                required:
+                - username
+          description: ''
+    patch:
+      tags:
+      - User
+      summary: Atualiza parcialmente as informações de um usuário.
+      description: Atualiza parcialmente as informações de um usuário.
+      operationId: partial_updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "A unique integer value identifying this usu\xE1rio."
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: &id027
+              properties:
+                username:
+                  type: string
+                  description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras, n\xFA\
+                    meros e @/./+/-/_ apenas."
+                  pattern: ^[\w.@+-]+\Z
+                  maxLength: 150
+                email:
+                  type: string
+                  format: email
+                  maxLength: 254
+                groups:
+                  type: array
+                  items:
+                    type: string
+                  description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                    rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos seus\
+                    \ grupos."
+          application/x-www-form-urlencoded:
+            schema: *id027
+          multipart/form-data:
+            schema: *id027
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    readOnly: true
+                  username:
+                    type: string
+                    description: "Obrigat\xF3rio. 150 caracteres ou menos. Letras,\
+                      \ n\xFAmeros e @/./+/-/_ apenas."
+                    pattern: ^[\w.@+-]+\Z
+                    maxLength: 150
+                  email:
+                    type: string
+                    format: email
+                    maxLength: 254
+                  groups:
+                    type: array
+                    items:
+                      type: string
+                    description: "Os grupos que este usu\xE1rio pertence. Um usu\xE1\
+                      rio ter\xE1 todas as permiss\xF5es concedidas a cada um dos\
+                      \ seus grupos."
+                required:
+                - username
+          description: ''
+    delete:
+      tags:
+      - User
+      summary: Exclui um usuário do sistema.
+      description: Exclui um usuário do sistema.
+      operationId: destroyUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "A unique integer value identifying this usu\xE1rio."
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /v1/uploads:
+    post:
+      tags:
+      - Upload
+      summary: Realiza o upload das planilhas.
+      description: O endpoint é responsável por alimentar o bando de dados da API por meio dos dados da planilhas uploaded.
+      operationId: createFileUploadViewSet
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+  /api-token-auth/:
+    post:
+      tags:
+      - Auth
+      summary: Retorna um token de autenticação.
+      description: O cliente envia seus dados de login e a API retorna um token que deve ser todas as requisições que o cliente fazer à API.
+      operationId: CreateObtainAuthToken
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+components:
+security:
+tags:
+  - name: Brand
+    description: Operações sobre as marcas dos equipamentos.
+  - name: Category
+    description: Operações sobre as categorias dos equipamentos.
+  - name: Computer
+    description: Operações sobre os computadores especificamente.
+  - name: Equipament
+    description: Operações sobre os equipamentos.
+  - name: Floor
+    description: Operações sobre os andares do prédio da instituição.
+  - name: Group
+    description: Operações sobre os grupos de usuários do sistema.
+  - name: Model
+    description: Operações sobre os modelos dos equipamentos.
+  - name: Ua
+    description: Operações sobre as unidades administrativas da instituição.
+  - name: User
+    description: Operações sobre os usuários do sistema.
+  - name: Upload
+    description: Operações para upload de planilhas.
+  - name: Auth
+    description: Operações para autenticação dos usuários.
+  - name: Brand Model
+    description: Modelo representando uma marca de equipamento.
+  - name: Category Model
+    description: Modelo representando uma categoria de equipamento.
+  - name: Computer Model
+    description: Modelo representando um computador
+  - name: Equipament Model
+    description: Modelo representando um equipamento
+  - name: Floor Model
+    description: Modelo representando um andar de um prédio de uma instituição.
+  - name: Group Model
+    description: Modelo representando um grupo de usuário do sistema.
+  - name: Model Model
+    description: Modelo representando um modelo de equipamento.
+  - name: Ua Model
+    description: Modelo representando uma unidade administrativa da instituição.
+  - name: User Model
+    description: Modelo representano um usuário do sistema.
+x-tagGroups: 
+  - name: Geral 
+    tags:
+      - Brand
+      - Category
+      - Computer
+      - Equipament
+      - Floor
+      - Model
+      - Ua
+  - name: Gerenciamento de Usuários
+    tags:
+      - Group
+      - User
+  - name: Serviços de Autenticação
+    tags:
+      - Auth
+  - name: Modelos
+    tags:
+      - Brand Model
+      - Category Model
+      - Computer Model
+      - Equipament Model
+      - Floor Model
+      - Group Model
+      - Model Model
+      - Ua Model
+      - User Model 
