@@ -190,11 +190,7 @@ class FileUploadViewSet(viewsets.ViewSet):
 
     def create(self, request):
         """
-        csvfile = request.data['file']
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            print(row)
-        #Colocar cada dada em suas determinadas tabelas do banco.
+        API endpoint que permite a criação de novos recursos a partir de um arquivo .csv
         """
         try:
             f = request.data['file']
