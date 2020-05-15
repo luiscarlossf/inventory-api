@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views
+from rest_framework.schemas import get_schema_view
+from django.conf import settings
+from django.conf.urls.static import static
+
 import logging
 
 logger = logging.getLogger("django")
@@ -27,6 +31,11 @@ urlpatterns = [
     path('', include('api.urls')), #Adiciona as views da API
     path('api-auth/', include('rest_framework.urls')), #Add REST framework's login an logout views
     path('api-token-auth/', views.obtain_auth_token),
-]
+    path('openapi', get_schema_view(
+        title="Inventory API",
+        description="API para o sistema de levantamento dos equipamentos em uso no MPF/PI.",
+        version="1.0.0"
+    ), name='openapi-schema'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 logger.debug("Rotas 'admin/', '/', 'api-auth/', 'api-token-auth/' configuradas.")
