@@ -1,1 +1,3 @@
-
+[17/05/2020 12:48:56] /home/luiscarlos/Documentos/inventory-api/api/views.py DEBUG 14966 140201535534848 Criando novos recursos a partir da planilha enviada.
+[17/05/2020 12:48:57] /home/luiscarlos/Documentos/inventory-api/api/views.py INFO 14966 140201535534848 Lendo linhas da planilha
+[17/05/2020 12:51:33] /home/luiscarlos/Documentos/inventory-api/api/views.py DEBUG 14966 140201535534848 Dados carregados com sucesso.

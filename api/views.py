@@ -12,7 +12,7 @@ from .utils import delete_all_database, save_data_from_sheet
 
 import logging
 
-logger = logging.getLogger("django")
+logger = logging.getLogger("api")
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -210,7 +210,7 @@ class FileUploadViewSet(viewsets.ViewSet):
                 delete_all_database() #Deleta todos os dados do banco de dados
 
                 reader = csv.DictReader(csvfile, delimiter=';')
-                logger.debug("Lendo linhas da planilha")
+                logger.info("Lendo linhas da planilha")
 
                 for row in reader: # Itera sobre as linhas do arquivo `csvfile`
                     #Carrega as categorias
@@ -256,12 +256,15 @@ class FileUploadViewSet(viewsets.ViewSet):
                         result = save_data_from_sheet(string, reg_exp, ['patrimony', 'warranty_start', 'warranty_end', 'acquisition_value'], ComputerSerializer, Computer, uris=uris, request=request)
                         
                     else:
+                        logger.error("Categoria do equipamento não foi definida.")
                         raise ValueError("Categoria do equipamento não foi definida.")
 
                     if not(result):
-                        raise RuntimeWarning("Um equipamento não foi salvo.")
-            
+                        logger.error("Um equipamento não foi salvo.")
+                        raise RuntimeError("Um equipamento não foi salvo.")
+            logger.debug("Dados carregados com sucesso.")
             return Response("O upload foi concluido com sucesso.", status=204)
         except Exception as e:
+            logger.warning("O upload não foi concluido com sucesso.")
             return Response("O upload não foi concluido com sucesso. {0}".format(e), status=400)
     

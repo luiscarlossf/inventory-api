@@ -159,11 +159,13 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {user} {message}',
+            'format': '[{asctime}] {pathname} {levelname} {process} {thread} {message}',
+            'datefmt':'%d/%m/%Y %I:%M:%S',
             'style': '{',
         },
         'simple': {
-            'format': '{levelname} {message}',
+            'format': '[{asctime}] {levelname} {message}',
+            'datefmt':'%d/%m/%Y %I:%M:%S',
             'style': '{',
         },
     },
@@ -179,7 +181,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'filename': './logs/debug.log',
             'maxBytes': 5120,
             'formatter': 'verbose',
         },
@@ -197,12 +199,12 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
+        'api': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
-        'django': {
+        'api_': {
             'handlers': ['file', 'mail_admins'],
             'level': 'ERROR',
             'propagate': True,
