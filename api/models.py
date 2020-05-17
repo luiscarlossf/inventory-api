@@ -110,10 +110,9 @@ class Model(models.Model):
             model = Model.objects.filter(name=self.name)
             model.delete()
 
-class Equipament(models.Model):
-    """
-    Modelo representando um equipamento.
-    """
+class EquipamentInfo(models.Model):
+    "Classe abstrata das informações básicas de todos os equipamentos "
+    
     patrimony = models.CharField("Patrimônio", unique=True, max_length=8, blank = True, null=True, help_text="Insira o patrimônio do equipamento.")
     brand = models.ForeignKey(Brand, verbose_name="Marca", blank=True, null=True, on_delete=models.PROTECT, help_text="Selecione a marca do equipamento.")
     category = models.ForeignKey(Category, verbose_name="Categoria", blank=True, on_delete=models.PROTECT, help_text="Selecione a categoria do equipamento." )
@@ -135,10 +134,17 @@ class Equipament(models.Model):
 
     status = models.CharField("Status de uso", max_length=1, choices=_STATUS, default='u')
 
+    class Meta:
+        abstract = True
+        ordering = ['patrimony']
+
     def clean(self):
         #Não permite que sejam adicionadas datas de garantias sem lógica.
         if (self.warranty_start and self.warranty_end) and (self.warranty_start > self.warranty_end):
             raise ValidationError({"warranty_end":_("Data de fim de garantia menor que a data de início de garantia.")})
+
+        if not(self.floor):
+            self.floor = self.ua.floor
 
     def __str__(self):
         """
@@ -151,8 +157,14 @@ class Equipament(models.Model):
         String descrevendo o equipamento
         """
         return self.category + self.brand + self.model
+    
+class Equipament(EquipamentInfo):
+    """
+    Modelo representando equipamentos de modo geral.
+    """
+    pass
 
-class Computer(Equipament):
+class Computer(EquipamentInfo):
     """
     Modelo representando um computador
     """
