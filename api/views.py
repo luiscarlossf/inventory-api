@@ -8,6 +8,11 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import UserSerializer, GroupSerializer, BrandSerializer, CategorySerializer, \
 ComputerSerializer, EquipamentSerializer, FloorSerializer, ModelSerializer, UaSerializer, FileUploadSerializer
+from .utils import delete_all_database, save_data_from_sheet
+
+import logging
+
+logger = logging.getLogger("django")
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -194,114 +199,67 @@ class FileUploadViewSet(viewsets.ViewSet):
         """
         try:
             f = request.data['file']
-            with open('./files/upload-file.txt', 'wb+') as destination:
+            origem = request.data['origem']
+            logger.debug("Criando novos recursos a partir da planilha enviada.")
+            with open('./api/static/uploaded/'+origem+'.csv', 'wb+') as destination:
                 for chunk in f.chunks():
                     destination.write(chunk)
 
-            with open('./files/upload-file.txt') as csvfile:
-                #Deleta todos os dados do banco de dados
-                Equipament.objects.all().delete()
-                Computer.objects.all().delete()
-                Brand.objects.all().delete()
-                Category.objects.all().delete()
-                Floor.objects.all().delete()
-                Model.objects.all().delete()
-                Ua.objects.all().delete()
+            with open('./api/static/uploaded/'+origem+'.csv', newline='') as csvfile:
+                
+                delete_all_database() #Deleta todos os dados do banco de dados
 
                 reader = csv.DictReader(csvfile, delimiter=';')
+                logger.debug("Lendo linhas da planilha")
 
-                for row in reader:
+                for row in reader: # Itera sobre as linhas do arquivo `csvfile`
                     #Carrega as categorias
-                    c = row['Material'].split('-')[1]
-                    category = CategorySerializer(data={'name': c})
-                    c_url = None
-                    if category.is_valid():
-                        category = category.save() #Retorna uma instância de Category
-                        c_url = 'http://127.0.0.1:8000/categories/{0}/'.format(category.id)
-                    else:
-                        category = Category.objects.get(name=c[1:])
-                        c_url = 'http://127.0.0.1:8000/categories/{0}/'.format(category.id)
-
+                    reg_exp = r'^(\d+) - (?P<name>\w[\w\s]+\w)' #ATENÇÃO: VERIFIQUE SE EXPRESSÃO ESTÁ CORRETA.
+                    c_id = save_data_from_sheet(row['Material'], reg_exp, ['name'], CategorySerializer, Category)
+                    c_uri= request.build_absolute_uri('categories/{0}'.format(c_id)) if c_id else None
+                    
                     #Carrega os andares
-                    f_url = None
-                    try:
-                        f = row['U.L.'].split('-')[2] 
-                        if ("ANDAR" in f) or (("TÉRREO") in f):
-                            f = f.split(',')[1] 
-                            floor = FloorSerializer(data={'name':f})
-                            if floor.is_valid():
-                                floor = floor.save() #Retorna uma instância de Floor
-                                f_url = 'http://127.0.0.1:8000/floors/{0}/'.format(floor.id)
-                            else:
-                                floor = Floor.objects.get(name=f[2:])
-                                print(row['U.L.'].split('-')[2].split(','))
-                                f_url = 'http://127.0.0.1:8000/floors/{0}/'.format(floor.id)
-            
-                    except Exception:
-                        pass
-
+                    #13773 - 01000621 - EDIFICIO SEDE, 2 ANDAR, ASSESSORIA DE COMUNICACAO SOCIAL
+                    reg_exp = r'(?P<name>(\d ANDAR)|TERREO)'
+                    id = save_data_from_sheet(row['U.L.'], reg_exp, ['name'], FloorSerializer, Floor)
+                    f_uri = request.build_absolute_uri('floors/{0}'.format(id)) if id else None
+                
+                    
                     #Carrega as UAs
-                    u = row['U.A.'].split('-')
-                    u_url = None
-                    if f_url != None:
-                        ua = UaSerializer(data={'code':u[0], 'name':u[1], 'floor':f_url})
-                    else:
-                        ua = UaSerializer(data={'code':u[0], 'name':u[1]})
-                    if ua.is_valid():
-                        ua = ua.save() #Retorna uma instância de Ua
-                        u_url = 'http://127.0.0.1:8000/uas/{0}/'.format(ua.id)
-                    else:
-                        try:
-                            ua = Ua.objects.get(code=u[0])
-                            u_url = 'http://127.0.0.1:8000/uas/{0}/'.format(ua.id)
-                        except Exception:
-                            ua = None
+                    #01008256 - PR/PI COORDENADORIA DA PRM - PRM CORRENTE/PI
+                    reg_exp = r'^(?P<code>\d+) \- (?P<name>\w[\w\s/\-.]+\w)'
+                    uris = {'floor':f_uri} if f_uri else None
+                    id = save_data_from_sheet(row['U.A.'], reg_exp, ['code','name'], UaSerializer, Ua, uris, request)
+                    u_uri = request.build_absolute_uri('uas/{0}'.format(id)) if id else None
 
+                    
                     #Carrega as marcas
-                    b = row['Marca']
-                    b_url = None
-                    brand = BrandSerializer(data={'name':b})
-                    if brand.is_valid():
-                        brand = brand.save() #Retorna uma instância de Brand
-                        b_url = 'http://127.0.0.1:8000/brands/{0}/'.format(brand.id)
-                    else:
-                        try:
-                            brand = Brand.objects.get(name=b)
-                            b_url = 'http://127.0.0.1:8000/brands/{0}/'.format(brand.id)
-                        except Exception:
-                            brand = None
+                    reg_exp = r'(?P<name>\w[\w\s/\-.]+\w)'
+                    id = save_data_from_sheet(row['Marca'], reg_exp, ['name'], BrandSerializer, Brand, request=request)
+                    b_uri = request.build_absolute_uri('brands/{0}'.format(id)) if id else None
 
                     #Carrega os modelos
-                    m = row['Modelo']
-                    m_url = None
-                    model = ModelSerializer(data={'name':m})
-                    if model.is_valid():
-                        model = model.save() #Retorna uma instância de Model
-                        m_url = 'http://127.0.0.1:8000/models/{0}/'.format(model.id)
-                    else:
-                        try:
-                            model = Model.objects.get(name=m)
-                            m_url = 'http://127.0.0.1:8000/models/{0}/'.format(model.id)
-                        except:
-                            model = None
+                    reg_exp = r'(?P<name>\w[\w\s/\-.]+\w)'
+                    id = save_data_from_sheet(row['Modelo'], reg_exp, ['name'], ModelSerializer, Model, request=request)
+                    m_uri = request.build_absolute_uri('models/{0}'.format(id)) if id else None
 
-                    #Carrega os equipamentos/computadores
-                    patrimony = row['Patrimônio']
-                    warranty = row['Garantia'].split(' ')
-                    if len(warranty) == 6:
-                        start = warranty[0]
-                        end = warranty[2]
+                    #Carrega os equipamentos.
+                    #27000247;  -  ;920.85
+                    string = row['Patrimônio']+';'+row['Garantia']+';'+row['Valor Aquisição(R$)'].replace('.', '').replace(',', '.')
+                    reg_exp = r'^(?P<patrimony>\d+);((?P<warranty_start>\d\d\d\d-\d\d-\d\d)|\s) - ((?P<warranty_end>\d\d\d\d-\d\d-\d\d)|\s);(?P<acquisition_value>\d+\.\d+)'
+                    uris = {'category': c_uri, 'floor': f_uri, 'ua': u_uri, 'brand': b_uri, 'model': m_uri}
+                    category = Category.objects.get(id=c_id) if c_id else None
+                    result = None
+                    if not(category and ("MICROCOMPUTADOR" in category.name)): #Salva um computador
+                        result = save_data_from_sheet(string, reg_exp, ['patrimony', 'warranty_start', 'warranty_end', 'acquisition_value'], EquipamentSerializer, Equipament, uris=uris, request=request)
+                    elif category:
+                        result = save_data_from_sheet(string, reg_exp, ['patrimony', 'warranty_start', 'warranty_end', 'acquisition_value'], ComputerSerializer, Computer, uris=uris, request=request)
+                        
                     else:
-                        start = end = None
-                    acquisition_value = float(row['Valor Aquisição(R$)'].replace('.', '').replace(',', '.'))
-                    if (c_url != None) and ("MICROCOMPUTADOR" in category.name): #Primeiro verifica se category existe
-                        computer = ComputerSerializer(data={'patrimony':patrimony, 'brand':b_url, 'category':c_url,'model':m_url, 'warranty_start':start, 'warranty_end':end, 'ua':u_url, 'floor':f_url, 'acquisition_value':acquisition_value})
-                        if computer.is_valid():
-                            computer.save()
-                    else:
-                        equipament = EquipamentSerializer(data={'patrimony':patrimony, 'brand':b_url, 'category':c_url, 'model':m_url, 'warranty_start':start, 'warranty_end':end, 'ua':u_url, 'floor':f_url, 'acquisition_value':acquisition_value})
-                        if equipament.is_valid():
-                            equipament.save()
+                        raise ValueError("Categoria do equipamento não foi definida.")
+
+                    if not(result):
+                        raise RuntimeWarning("Um equipamento não foi salvo.")
             
             return Response("O upload foi concluido com sucesso.", status=204)
         except Exception as e:
