@@ -29,9 +29,9 @@ Clonando o repositório...
 ```
 git clone https://github.com/luiscarlossf/inventory-api.git
 
-git checkout dev
-
 cd inventory-api
+
+git checkout dev
 ```
 
 (Recomendável) Criando e ativando ambiente virtual... 
