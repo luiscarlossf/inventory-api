@@ -86,7 +86,7 @@ class ComputerModelTests(TransactionTestCase):
         '''
         with self.assertRaises(ValidationError):
             computer = Computer.objects.get(patrimony='12345678')
-            computer.status = "A"
+            computer.status = "Amor"
             computer.clean_fields()
 
 class EquipamentModelTests(TransactionTestCase):
@@ -465,12 +465,12 @@ class EquipamentsTests(APITestCase):
         aleatório.
         '''
         category = Category.objects.get(name="Categoria1")
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"Geraldo", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
         response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 400)
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"Usado", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
         response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
@@ -481,12 +481,12 @@ class EquipamentsTests(APITestCase):
         Assegura que não sejam adicionados equipamentos com o mesmo patrimônios.
         '''
         category = Category.objects.get(name="Categoria1")
-        equipament_json = {"patrimony":"12345678","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345678","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"Geraldo", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
         response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 400)
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"Usado", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
         response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
@@ -497,12 +497,12 @@ class EquipamentsTests(APITestCase):
         Assegura que não sejam adicionados equipamentos com datas de garantias conflitantes. 
         '''
         category = Category.objects.get(name="Categoria1")
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-05","warranty_end":"2020-05-03","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"g", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-05","warranty_end":"2020-05-03","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"Geraldo", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
         response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')
         self.assertEqual(response.status_code, 400)
-        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"u", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
+        equipament_json = {"patrimony":"12345670","warranty_start":"2020-05-03","warranty_end":"2020-05-05","acquisition_date":"2020-05-05","acquisition_value":444.0,"status":"Usado", "category": "/" + DEFAULT_VERSION + "/categories/"+str(category.id)}
         client = APIClient()
         client.login(username='testadmin', password='testadmin2020')
         response = client.post('/' + DEFAULT_VERSION + '/equipaments', equipament_json, format='json')

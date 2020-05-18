@@ -785,11 +785,11 @@ paths:
                           nullable: true
                         status:
                           enum:
-                          - u
-                          - a
-                          - e
-                          - s
-                          - d
+                          - Usado
+                          - Almoxarifado
+                          - Estaleiro
+                          - Sucata
+                          - Doação
                         policy:
                           type: boolean
                           nullable: true
@@ -865,11 +865,11 @@ paths:
                   nullable: true
                 status:
                   enum:
-                  - u
-                  - a
-                  - e
-                  - s
-                  - d
+                  - Usado
+                  - Almoxarifado
+                  - Estaleiro
+                  - Sucata
+                  - Doação
                 policy:
                   type: boolean
                   nullable: true
@@ -944,11 +944,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   policy:
                     type: boolean
                     nullable: true
@@ -1135,11 +1135,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   policy:
                     type: boolean
                     nullable: true
@@ -1321,11 +1321,11 @@ paths:
                   nullable: true
                 status:
                   enum:
-                  - u
-                  - a
-                  - e
-                  - s
-                  - d
+                  - Usado
+                  - Almoxarifado
+                  - Estaleiro
+                  - Sucata
+                  - Doação
                 policy:
                   type: boolean
                   nullable: true
@@ -1400,11 +1400,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   policy:
                     type: boolean
                     nullable: true
@@ -1586,11 +1586,11 @@ paths:
                   nullable: true
                 status:
                   enum:
-                  - u
-                  - a
-                  - e
-                  - s
-                  - d
+                  - Usado
+                  - Almoxarifado
+                  - Estaleiro
+                  - Sucata
+                  - Doação
                 policy:
                   type: boolean
                   nullable: true
@@ -1665,11 +1665,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   policy:
                     type: boolean
                     nullable: true
@@ -1962,11 +1962,11 @@ paths:
                           nullable: true
                         status:
                           enum:
-                          - u
-                          - a
-                          - e
-                          - s
-                          - d
+                          - Usado
+                          - Almoxarifado
+                          - Estaleiro
+                          - Sucata
+                          - Doação
                         brand:
                           type: string
                           nullable: true
@@ -2026,11 +2026,11 @@ paths:
                   nullable: true
                 status:
                   enum:
-                  - u
-                  - a
-                  - e
-                  - s
-                  - d
+                  - Usado
+                  - Almoxarifado
+                  - Estaleiro
+                  - Sucata
+                  - Doação
                 brand:
                   type: string
                   nullable: true
@@ -2086,11 +2086,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   brand:
                     type: string
                     nullable: true
@@ -2233,11 +2233,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   brand:
                     type: string
                     nullable: true
@@ -2375,11 +2375,11 @@ paths:
                   nullable: true
                 status:
                   enum:
-                  - u
-                  - a
-                  - e
-                  - s
-                  - d
+                  - Usado
+                  - Almoxarifado
+                  - Estaleiro
+                  - Sucata
+                  - Doação
                 brand:
                   type: string
                   nullable: true
@@ -2435,11 +2435,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   brand:
                     type: string
                     nullable: true
@@ -2577,11 +2577,11 @@ paths:
                   nullable: true
                 status:
                   enum:
-                  - u
-                  - a
-                  - e
-                  - s
-                  - d
+                  - Usado
+                  - Almoxarifado
+                  - Estaleiro
+                  - Sucata
+                  - Doação
                 brand:
                   type: string
                   nullable: true
@@ -2637,11 +2637,11 @@ paths:
                     nullable: true
                   status:
                     enum:
-                    - u
-                    - a
-                    - e
-                    - s
-                    - d
+                    - Usado
+                    - Almoxarifado
+                    - Estaleiro
+                    - Sucata
+                    - Doação
                   brand:
                     type: string
                     nullable: true
