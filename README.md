@@ -27,17 +27,17 @@ Recomendamos que você ative seu [ambiente virtual](https://developer.mozilla.or
 
 Clonando o repositório...
 ```
-git clone https://github.com/luiscarlossf/inventory-api.git
+$ git clone https://github.com/luiscarlossf/inventory-api.git
 
-cd inventory-api
+$ cd inventory-api
 
-git checkout dev
+$ git checkout dev
 ```
 
 (Recomendável) Criando e ativando ambiente virtual... 
 
 ```
-mkvirtualenv test
+$ mkvirtualenv test
 ```
 
 Instalando as dependências do projeto... 
@@ -48,20 +48,14 @@ $ pip3 install -r requirements.txt
 Criando super usuário...
 
 ```
-python3 manape.py createsuperuser --username [SEU USERNAME]  --email [SEU EMAIL]
-Password:
-Password (again):
+$ python3 manape.py createsuperuser --username [SEU USERNAME]  --email [SEU EMAIL]
+$ Password:
+$ Password (again):
 ```
-Migrando definições de modelos para o banco de dados...
+Migrando definições dos modelos para o banco de dados...
 
 ```
-python3 manage.py migrate
-```
-
-Migrando as alterações já feitas para o banco de dados...
-
-```
-$ python manage.py migrate
+$ python3 manage.py migrate
 ```
 
 Executando o projeto...
