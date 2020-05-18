@@ -68,7 +68,11 @@ $ python3 manage.py runserver
 A API vai está rodando no seguinte endereço:
 http://127.0.0.1:8000/{VERSION_API}
 
-VERSION_API é a versão da API que deseja acessar, por exemplo: http://127.0.0.1:8000/v1
+VERSION_API é a versão da API que deseja acessar, por exemplo: http://127.0.0.1:8000/v1 .
+
+## Documentação
+
+Você pode visualizar a documentação da API acessando: http://127.0.0.1:8000/redoc ou http://127.0.0.1:8000/swagger-ui .
 
 ## Execução de testes
 
