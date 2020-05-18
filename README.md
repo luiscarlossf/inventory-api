@@ -45,17 +45,18 @@ Instalando as dependências do projeto...
 ```
 $ pip3 install -r requirements.txt
 ```
+Migrando definições dos modelos para o banco de dados...
+
+```
+$ python3 manage.py migrate
+```
+
 Criando super usuário...
 
 ```
 $ python3 manape.py createsuperuser --username [SEU USERNAME]  --email [SEU EMAIL]
 $ Password:
 $ Password (again):
-```
-Migrando definições dos modelos para o banco de dados...
-
-```
-$ python3 manage.py migrate
 ```
 
 Executando o projeto...
