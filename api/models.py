@@ -125,14 +125,14 @@ class EquipamentInfo(models.Model):
     acquisition_value = models.FloatField("Valor de Aquisição", null=True, blank=True)
     
     _STATUS = (
-        ('u', 'Usado'),
-        ('a', 'Almoxarifado'),
-        ('e', 'Estaleiro'),
-        ('s', 'Sucata'),
-        ('d', 'Doação'),
+        ('Usado', 'Usado'),
+        ('Almoxarifado', 'Almoxarifado'),
+        ('Estaleiro', 'Estaleiro'),
+        ('Sucata', 'Sucata'),
+        ('Doação', 'Doação'),
     )
 
-    status = models.CharField("Status de uso", max_length=1, choices=_STATUS, default='u')
+    status = models.CharField("Status de uso", max_length=12, choices=_STATUS, default='Usado')
 
     class Meta:
         abstract = True
