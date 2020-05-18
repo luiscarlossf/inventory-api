@@ -23,6 +23,7 @@ Usamos o pacote [Django Auth LDAP](https://django-auth-ldap.readthedocs.io/en/la
 ### Instalação
 
 Um passo a passo mostrando como obter o ambiente de desenvolvimento em execução. Lembrando que é necessário que você esteja no diretório raiz do projeto antes de executar os comandos a seguir.
+Recomendamos que você ative seu [ambiente virtual](https://developer.mozilla.org/pt-BR/docs/Learn/Server-side/Django/ambiente_de_desenvolvimento).
 
 Clonando o repositório...
 ```
@@ -55,6 +56,12 @@ Migrando definições de modelos para o banco de dados...
 
 ```
 python3 manage.py migrate
+```
+
+Migrando as alterações já feitas para o banco de dados...
+
+```
+$ python manage.py migrate
 ```
 
 Executando o projeto...
