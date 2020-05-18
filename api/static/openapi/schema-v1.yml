@@ -4,9 +4,20 @@ info:
   description: | 
     API para sistema de levantamento de equipamentos do MPF/PI.
     # Introdução
-    # Especificação OpenAPI
+      A API é documentada seguindo a especificação [OpenAPI](http://spec.openapis.org/oas/v3.0.3). 
+      Além da sintaxe padrão do OpenAPI, usamos algumas [extensões da Redoc](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
     # Autenticação
+      A Inventory API oferece duas formas de autenticação:
+      - API Token
+      - Basic Authentication baseado em LDAP
+
+    Lightweight Directory Access Protocol, ou LDAP, é um protocolo de 
+    aplicação aberto, livre de fornecedor e padrão de indústria para acessar 
+    e manter serviços de informação de diretório distribuído sobre uma 
+    rede de Protocolo da Internet.
+
     <SecurityDefinitions />
+
   termsOfService: 
   contact:
     name: CTIC Support
@@ -16,15 +27,12 @@ info:
     name: GNU General Public License v3.0
     url: https://github.com/luiscarlossf/inventory-api/blob/master/LICENSE
   version: 1.0.0
+externalDocs:
+  description: Encontre mais informações em nosso GitHub.
+  url: 'https://github.com/luiscarlossf/inventory-api'
 servers:
-  - url: http://localhost:8000/{basePath}
+  - url: http://localhost:8000
     description: Servidor de desenvolvimento.
-    variables:
-      basePath:
-        #indica a versão da API 
-        default: 'v1'
-        enum:
-          - 'v1'
 paths:
   /v1/brands:
     get:
@@ -82,6 +90,10 @@ paths:
                       required:
                       - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Brand
@@ -120,6 +132,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/brands/{id}:
     get:
       tags:
@@ -162,6 +178,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Brand
@@ -218,6 +238,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Brand
@@ -272,6 +296,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Brand
@@ -300,6 +328,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/categories:
     get:
       tags:
@@ -356,6 +388,10 @@ paths:
                       required:
                       - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Category
@@ -394,6 +430,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/categories/{id}:
     get:
       tags:
@@ -436,6 +476,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Category
@@ -492,6 +536,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Category
@@ -546,6 +594,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Category
@@ -574,6 +626,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/computers:
     get:
       tags:
@@ -934,6 +990,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/computers/{id}:
     get:
       tags:
@@ -1121,6 +1181,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Computer
@@ -1382,6 +1446,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Computer
@@ -1643,6 +1711,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Computer
@@ -1755,6 +1827,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/equipaments:
     get:
       tags:
@@ -1912,6 +1988,10 @@ paths:
                           nullable: true
                           description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Equipament
@@ -2032,6 +2112,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/equipaments/{id}:
     get:
       tags:
@@ -2175,6 +2259,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Equipament
@@ -2373,6 +2461,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Equipament
@@ -2571,6 +2663,10 @@ paths:
                     nullable: true
                     description: Selecione o andar em que o equipamento se encontra.
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Equipament
@@ -2659,6 +2755,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/floors:
     get:
       tags:
@@ -2715,6 +2815,10 @@ paths:
                       required:
                       - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Floor
@@ -2753,6 +2857,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/floors/{id}:
     get:
       tags:
@@ -2795,6 +2903,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Floor
@@ -2851,6 +2963,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Floor
@@ -2933,6 +3049,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/groups:
     get:
       tags:
@@ -2976,6 +3096,10 @@ paths:
                       required:
                       - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Group
@@ -3012,6 +3136,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/groups/{id}:
     get:
       tags:
@@ -3041,6 +3169,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Group
@@ -3083,6 +3215,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Group
@@ -3123,6 +3259,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Group
@@ -3139,6 +3279,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/models:
     get:
       tags:
@@ -3195,6 +3339,10 @@ paths:
                       required:
                       - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Model
@@ -3233,6 +3381,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/models/{id}:
     get:
       tags:
@@ -3275,6 +3427,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Model
@@ -3331,6 +3487,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Model
@@ -3385,6 +3545,10 @@ paths:
                 required:
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Model
@@ -3413,6 +3577,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/uas:
     get:
       tags:
@@ -3478,6 +3646,10 @@ paths:
                       - code
                       - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - Ua
@@ -3534,6 +3706,10 @@ paths:
                 - code
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/uas/{id}:
     get:
       tags:
@@ -3586,6 +3762,10 @@ paths:
                 - code
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - Ua
@@ -3660,6 +3840,10 @@ paths:
                 - code
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - Ua
@@ -3731,6 +3915,10 @@ paths:
                 - code
                 - name
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - Ua
@@ -3759,6 +3947,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/users:
     get:
       tags:
@@ -3816,6 +4008,10 @@ paths:
                       required:
                       - username
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     post:
       tags:
       - User
@@ -3880,6 +4076,10 @@ paths:
                 required:
                 - username
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/users/{id}:
     get:
       tags:
@@ -3923,6 +4123,10 @@ paths:
                 required:
                 - username
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     put:
       tags:
       - User
@@ -3993,6 +4197,10 @@ paths:
                 required:
                 - username
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     patch:
       tags:
       - User
@@ -4061,6 +4269,10 @@ paths:
                 required:
                 - username
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
     delete:
       tags:
       - User
@@ -4077,6 +4289,10 @@ paths:
       responses:
         '204':
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /v1/uploads:
     post:
       tags:
@@ -4091,6 +4307,10 @@ paths:
             application/json:
               schema: {}
           description: ''
+      security:
+        - api_auth:
+            - 'write'
+            - 'read'
   /api-token-auth/:
     post:
       tags:
@@ -4105,8 +4325,233 @@ paths:
             application/json:
               schema: {}
           description: ''
+  /api-auth/login/:
+      get:
+        tags:
+          - Auth
+        summary: Login do usuário no sistema.
+        description: Abre uma caixa de diálogo para o usuário colocar seu login e senha.
+        operationId: RetreiveLogin
+        externalDocs:
+          description: Saiba informações aqui.
+          url: 'https://www.django-rest-framework.org/api-guide/authentication/'
+      post:
+        tags:
+          - Auth
+        summary: Login do usuário no sistema.
+        description: O usuário para seus dados de login e senha.
+        operationId: CreateLogin
+        externalDocs:
+          description: Saiba informações aqui.
+          url: 'https://www.django-rest-framework.org/api-guide/authentication/'
+  /api-auth/logout/:
+      post:
+        tags:
+          - Auth
+        summary: Logout do usuário no sistema.
+        description: Desloga o usuário corrente.
+        operationId: Logout
+        externalDocs:
+          description: Saiba informações aqui.
+          url: 'https://www.django-rest-framework.org/api-guide/authentication/'
 components:
-security:
+  schemas:
+    Brand:
+      description: Uma representação de uma marca de equipamento.
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          description: Nome da marca.
+          type: string
+          maximum: 200
+    Category:
+      description: Uma representação de uma categoria de equipamento.
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          description: Nome da categoria.
+          type: string
+          maximum: 200
+    Floor:
+      description: Uma representação de um andar do prédio de uma instituição.
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          description: Descrição do andar.
+          type: string
+          maximum: 100
+    Ua:
+      description: Uma representação de uma unidade administrativa de uma instituição.
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          description: Código do ASI da Unidade Administrativa.
+          type: string
+          maximum: 8
+        name:
+          description: Nome da Unidade Administrativa.
+          type: string
+          maximum: 200
+        floor:
+          description: Andar onde a Unidade Administrativa está localizada no prédio da instituição. 
+          $ref: '#/components/schemas/Floor'
+    Model:
+      description: Uma representação de um modelo de equipamento.
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          description: Descrição do modelo.
+          type: string
+          maximum: 200
+    Equipament:
+      description: Uma representação de um equipamento.
+      type: object
+      required:
+        - category
+      properties:
+        patrimony:
+          description: Patrimônio do equipamento.
+          type: string
+          maximum: 8
+        warranty_start:
+          description: Data de início da garantia do equipamento.
+          type: string
+          format: date
+        warranty_end:
+          description: Data do fim da garantia do equipamento.
+          type: string
+          format: date
+        acquisition_date:
+          description: Data de aquisição do equipamento.
+          type: string
+          format: date
+        acquisition_value:
+          description: Valor de aquisição do equipamento.
+          type: number
+          maximum: float
+        status:
+          description: Status de uso do equipamento
+          type: string
+          enum:
+            - Usado
+            - Almoxarifado
+            - Estaleiro
+            - Sucata
+            - Doação
+          default: 'Usado'
+        brand:
+          description: Marca do equipamento.
+          $ref : '#/components/schemas/Brand'
+        category:
+          description: Categoria do equipamento.
+          $ref : '#/components/schemas/Category'
+        model:
+          description: Modelo do equipamento.
+          $ref : '#/components/schemas/Model'
+        ua:
+          description: Unidade Administrativa na qual o equipamento está alocado.
+          $ref : '#/components/schemas/Ua'
+        floor:
+          description: Andar onde o equipamento está alocado..
+          $ref : '#/components/schemas/Brand'
+    Computer:
+      description: Uma representação de um computador.
+      type: object
+      required:
+        - category
+      properties:
+        patrimony:
+          description: Patrimônio do computador.
+          type: string
+          maximum: 8
+        warranty_start:
+          description: Data de início da garantia do computador.
+          type: string
+          format: date
+        warranty_end:
+          description: Data do fim da garantia do computador.
+          type: string
+          format: date
+        acquisition_date:
+          description: Data de aquisição do computador.
+          type: string
+          format: date
+        acquisition_value:
+          description: Valor de aquisição do computador.
+          type: number
+          maximum: float
+        status:
+          description: Status de uso do computador
+          type: string
+          enum:
+            - Usado
+            - Almoxarifado
+            - Estaleiro
+            - Sucata
+            - Doação
+          default: 'Usado'
+        policy:
+          description: Indica se o computador está dentro da política da instituição.
+          type: boolean
+          default: false
+        status_zenworks:
+          description: Status indica se o computador está sendo monitorado pelo ZENWORKS.
+          type: boolean
+          default: false  
+        status_trend:
+          description: Status indica se o computador está sendo monitorado pelo TREND.
+          type: boolean
+          default: false 
+        status_wsus:
+          description: Status indica se o computador está sendo monitorado pelo WSUS.
+          type: boolean
+          default: false 
+        brand:
+          description: Marca do computador.
+          $ref : '#/components/schemas/Brand'
+        category:
+          description: Categoria do computador.
+          $ref : '#/components/schemas/Category'
+        model:
+          description: Modelo do computador.
+          $ref : '#/components/schemas/Model'
+        ua:
+          description: Unidade Administrativa na qual o computador está alocado.
+          $ref : '#/components/schemas/Ua'
+        floor:
+          description: Andar onde o computador está alocado.
+          $ref : '#/components/schemas/Brand'
+  securitySchemas:
+    api_key:
+      type: apiKey
+      name: api_token
+      bearerFormat: Token
+      in: header
+    api_auth:
+      type: http
+      description: Serviço de autenticação padrão do DJANGO REST.
+      scheme: basic
+      flows:
+        implicit:
+          authorizationUrl: /api-auth/
+          scopes:
+            - write: modificar os recursos na sua conta.
+            - read: ler recursos na sua conta.
+    api_auth_ldap:
+      type: http
+      scheme: basic
+
 tags:
   - name: Brand
     description: Operações sobre as marcas dos equipamentos.
@@ -4130,22 +4575,36 @@ tags:
     description: Operações para upload de planilhas.
   - name: Auth
     description: Operações para autenticação dos usuários.
-  - name: Brand Model
-    description: Modelo representando uma marca de equipamento.
-  - name: Category Model
-    description: Modelo representando uma categoria de equipamento.
-  - name: Computer Model
-    description: Modelo representando um computador
-  - name: Equipament Model
-    description: Modelo representando um equipamento
-  - name: Floor Model
-    description: Modelo representando um andar de um prédio de uma instituição.
+  - name: brand_model
+    x-displayName: Brand Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Brand" />
+  - name: category_model
+    x-displayName: Category Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Category" />
+  - name: computer_model
+    x-displayName: Computer Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Computer" />
+  - name: equipament_model
+    x-displayName: Equipament Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Equipament" />
+  - name: floor_model
+    x-displayName: Floor Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Floor" />
   - name: Group Model
     description: Modelo representando um grupo de usuário do sistema.
-  - name: Model Model
-    description: Modelo representando um modelo de equipamento.
-  - name: Ua Model
-    description: Modelo representando uma unidade administrativa da instituição.
+  - name: model_model
+    x-displayName: Model Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Model" />
+  - name: ua_model
+    x-displayName: Ua Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/Ua" />
   - name: User Model
     description: Modelo representano um usuário do sistema.
 x-tagGroups: 
@@ -4167,12 +4626,12 @@ x-tagGroups:
       - Auth
   - name: Modelos
     tags:
-      - Brand Model
-      - Category Model
-      - Computer Model
-      - Equipament Model
-      - Floor Model
+      - brand_model
+      - category_model
+      - computer_model
+      - equipament_model
+      - floor_model
       - Group Model
-      - Model Model
-      - Ua Model
+      - model_model
+      - ea_model
       - User Model 
