@@ -24,10 +24,37 @@ Usamos o pacote [Django Auth LDAP](https://django-auth-ldap.readthedocs.io/en/la
 
 Um passo a passo mostrando como obter o ambiente de desenvolvimento em execução. Lembrando que é necessário que você esteja no diretório raiz do projeto antes de executar os comandos a seguir.
 
+Clonando o repositório...
+```
+git clone https://github.com/luiscarlossf/inventory-api.git
+
+git checkout dev
+
+cd inventory-api
+```
+
+(Recomendável) Criando e ativando ambiente virtual... 
+
+```
+mkvirtualenv test
+```
+
 Instalando as dependências do projeto... 
 
 ```
 $ pip3 install -r requirements.txt
+```
+Criando super usuário...
+
+```
+python3 manape.py createsuperuser --username [SEU USERNAME]  --email [SEU EMAIL]
+Password:
+Password (again):
+```
+Migrando definições de modelos para o banco de dados...
+
+```
+python3 manage.py migrate
 ```
 
 Executando o projeto...
@@ -35,6 +62,11 @@ Executando o projeto...
 ```
 $ python3 manage.py runserver
 ```
+
+A API vai está rodando no seguinte endereço:
+http://127.0.0.1:8000/{VERSION_API}
+
+VERSION_API é a versão da API que deseja acessar, por exemplo: http://127.0.0.1:8000/v1
 
 ## Execução de testes
 
