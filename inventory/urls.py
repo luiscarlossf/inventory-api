@@ -19,6 +19,7 @@ from rest_framework.authtoken import views
 from rest_framework.schemas import get_schema_view
 from django.conf import settings
 from django.conf.urls.static import static
+from api.views import CustomAuthToken
 
 import logging
 
@@ -30,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')), #Adiciona as views da API
     path('api-auth/', include('rest_framework.urls')), #Add REST framework's login an logout views
-    path('api-token-auth/', views.obtain_auth_token),
+    path('api-token-auth/', CustomAuthToken.as_view()),
     path('openapi', get_schema_view(
         title="Inventory API",
         description="API para o sistema de levantamento dos equipamentos em uso no MPF/PI.",
