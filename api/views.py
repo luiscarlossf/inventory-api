@@ -12,10 +12,14 @@ from .utils import delete_all_database, save_data_from_sheet
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
+from rest_framework.pagination import PageNumberPagination
 import logging
 
 logger = logging.getLogger("api")
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -24,6 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = None
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -33,6 +38,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = None
 
 
 class BrandViewSet(viewsets.ModelViewSet):
@@ -45,6 +51,7 @@ class BrandViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -67,6 +74,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -90,6 +98,7 @@ class ComputerViewSet(viewsets.ModelViewSet):
     ordering = ['patrimony']
     filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status', 'policy', 'status_zenworks', 'status_trend', 'status_wsus']
     search_fields = ['patrimony']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -112,6 +121,7 @@ class EquipamentViewSet(viewsets.ModelViewSet):
     ordering = ['patrimony']
     filterset_fields = [ 'brand', 'category', 'model', 'warranty_start', 'warranty_end', 'ua', 'floor', 'acquisition_date', 'acquisition_value', 'status']
     search_fields = ['patrimony']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -133,6 +143,7 @@ class FloorViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -154,6 +165,7 @@ class ModelViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name']
     ordering = ['name']
     search_fields = ['name']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -176,6 +188,7 @@ class UaViewSet(viewsets.ModelViewSet):
     ordering = ['name']
     filterset_fields = ['floor']
     search_fields = ['code', 'name']
+    pagination_class = None
 
     def get_permissions(self):
         """
@@ -198,6 +211,8 @@ class CustomAuthToken(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             'token': token.key,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
             'user_id': user.pk,
             'email': user.email
         })
