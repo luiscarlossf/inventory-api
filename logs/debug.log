@@ -1,3 +1,9 @@
 [17/05/2020 12:48:56] /home/luiscarlos/Documentos/inventory-api/api/views.py DEBUG 14966 140201535534848 Criando novos recursos a partir da planilha enviada.
 [17/05/2020 12:48:57] /home/luiscarlos/Documentos/inventory-api/api/views.py INFO 14966 140201535534848 Lendo linhas da planilha
 [17/05/2020 12:51:33] /home/luiscarlos/Documentos/inventory-api/api/views.py DEBUG 14966 140201535534848 Dados carregados com sucesso.
+[04/09/2020 02:20:20] /home/luiscarlos/Documentos/Python/inventory-api/api/views.py DEBUG 5345 139976918419200 Criando novos recursos a partir da planilha enviada.
+[04/09/2020 02:20:23] /home/luiscarlos/Documentos/Python/inventory-api/api/views.py INFO 5345 139976918419200 Lendo linhas da planilha
+[04/09/2020 02:20:23] /home/luiscarlos/Documentos/Python/inventory-api/api/views.py WARNING 5345 139976918419200 O upload não foi concluido com sucesso.
+[04/09/2020 02:20:39] /home/luiscarlos/Documentos/Python/inventory-api/api/views.py DEBUG 5345 139976918419200 Criando novos recursos a partir da planilha enviada.
+[04/09/2020 02:20:39] /home/luiscarlos/Documentos/Python/inventory-api/api/views.py INFO 5345 139976918419200 Lendo linhas da planilha
+[04/09/2020 02:23:49] /home/luiscarlos/Documentos/Python/inventory-api/api/views.py DEBUG 5345 139976918419200 Dados carregados com sucesso.
